@@ -1,11 +1,11 @@
 package com.example.nogimusic;
 
 public class User {
-    public int id;
+    public String id;
     public String username;
-    public int age;
+    public String age;
 
-    public void setId(int id1){
+    public void setId(String id1){
         this.id = id1;
     }
 
@@ -13,7 +13,7 @@ public class User {
         this.username = name;
     }
 
-    public void setAge(int age1){
+    public void setAge(String age1){
         this.age = age1;
     }
 

@@ -2,4 +2,8 @@
     <string name="app_name">NogiMusic</string>
     <string name="inputhint">请输入您的账号</string>
     <string name="passwordhint">请输入您的登录密码</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

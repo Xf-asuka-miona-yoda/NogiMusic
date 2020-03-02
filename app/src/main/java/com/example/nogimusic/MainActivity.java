@@ -1,6 +1,8 @@
 package com.example.nogimusic;
 
 
+import android.content.Intent;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +16,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText password;
     private String input_account;
     private String input_password;
-    private int loginback = 0;
+    private int loginback = -1; //登录标志位
 
 
     @Override
@@ -69,12 +73,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else {
                     sendrequest(); //全部符合要求发送登录请求
                 }
-                if (loginback == 1){
-                    Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                }
+                Timer timer = new Timer(); //由于网络请求是耗时操作 ，所以开一个子线程在200ms之后检查结果
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (loginback == 1){
+                            Looper.prepare();
+                            Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            //Log.d("NMSL", "你动啊");
+                            Looper.loop();
+                        }else if (loginback == 0){
+                            Looper.prepare();
+                            Toast.makeText(MainActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }else if (loginback == -1){
+                            Looper.prepare();
+                            Toast.makeText(MainActivity.this, "登录超时", Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }
+                    }
+                },300);
+
                 break;
             case R.id.button_register:
                 Toast.makeText(MainActivity.this, "注册", Toast.LENGTH_SHORT).show();
+                //Log.d("NMSL", Global_Variable.thisuser.id);
                 break;
             default:
                 break;
@@ -110,13 +135,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Gson gson = new Gson();
         List<login_result> resultsList = gson.fromJson(jsondata, new TypeToken<List<login_result>>(){}.getType());
         for (login_result result : resultsList){
-            Log.d("NMSL", result.result);
+            Global_Variable.thisuser.setId(result.id);
+            Global_Variable.thisuser.setAge(result.age);
+            Global_Variable.thisuser.setUsername(result.username);
             if (result.result.equals("登录成功")){
                 loginback = 1;
+            }else if (result.result.equals("登录失败")){
+                loginback = 0;
             }
+            Log.d("NMSL", result.result);
             Log.d("NMSL", result.id);
             Log.d("NMSL", result.username);
-            
+
         }
     }
 }
