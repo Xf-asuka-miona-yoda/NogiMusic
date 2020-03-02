@@ -28,8 +28,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button register;
     private EditText username;
     private EditText password;
-    private String input_name;
+    private String input_account;
     private String input_password;
+    private int loginback = 0;
 
 
     @Override
@@ -59,16 +60,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_login:  //点击登录按钮
-                input_name = username.getText().toString();
+                input_account = username.getText().toString();
                 input_password = password.getText().toString();
-                if (TextUtils.isEmpty(input_name)){ //首先要判断账号和密码是否为空
+                if (TextUtils.isEmpty(input_account)){ //首先要判断账号和密码是否为空
                     Toast.makeText(MainActivity.this, "请输入账号", Toast.LENGTH_SHORT).show();
                 }else if (TextUtils.isEmpty(input_password)){
                     Toast.makeText(MainActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                 }else {
                     sendrequest(); //全部符合要求发送登录请求
                 }
-
+                if (loginback == 1){
+                    Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.button_register:
                 Toast.makeText(MainActivity.this, "注册", Toast.LENGTH_SHORT).show();
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder() //请求参数
-                            .add("loginAccount", input_name)
+                            .add("loginAccount", input_account)
                             .add("loginPassword", input_password)
                             .build();
                     Request request = new Request.Builder()
@@ -105,10 +108,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void parsejson(String jsondata){ //使用GSON解析服务端返回的json数据
         Gson gson = new Gson();
-        List<User> userList = gson.fromJson(jsondata, new TypeToken<List<User>>(){}.getType());
-        for (User user : userList){
-            Log.d("NMSL", user.getName());
-            Log.d("NMSL", user.getPassword());
+        List<login_result> resultsList = gson.fromJson(jsondata, new TypeToken<List<login_result>>(){}.getType());
+        for (login_result result : resultsList){
+            Log.d("NMSL", result.result);
+            if (result.result.equals("登录成功")){
+                loginback = 1;
+            }
+            Log.d("NMSL", result.id);
+            Log.d("NMSL", result.username);
+            
         }
     }
 }
