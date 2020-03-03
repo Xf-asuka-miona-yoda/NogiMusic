@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_register:
                 Toast.makeText(MainActivity.this, "注册", Toast.LENGTH_SHORT).show();
                 //Log.d("NMSL", Global_Variable.thisuser.id);
+                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
