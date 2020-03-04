@@ -73,28 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else {
                     sendrequest(); //全部符合要求发送登录请求
                 }
-                Timer timer = new Timer(); //由于网络请求是耗时操作 ，所以开一个子线程在200ms之后检查结果
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (loginback == 1){
-                            Looper.prepare();
-                            Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            //Log.d("NMSL", "你动啊");
-                            Looper.loop();
-                        }else if (loginback == 0){
-                            Looper.prepare();
-                            Toast.makeText(MainActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
-                            Looper.loop();
-                        }else if (loginback == -1){
-                            Looper.prepare();
-                            Toast.makeText(MainActivity.this, "登录超时", Toast.LENGTH_SHORT).show();
-                            Looper.loop();
-                        }
-                    }
-                },300);
 
                 break;
             case R.id.button_register:
@@ -148,6 +126,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("NMSL", result.result);
             Log.d("NMSL", result.id);
             Log.d("NMSL", result.username);
+            if (loginback == 1){
+                Looper.prepare();
+                Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(intent);
+                //Log.d("NMSL", "你动啊");
+                Looper.loop();
+            }else if (loginback == 0){
+                Looper.prepare();
+                Toast.makeText(MainActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }else if (loginback == -1){
+                Looper.prepare();
+                Toast.makeText(MainActivity.this, "登录超时", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }
 
         }
     }

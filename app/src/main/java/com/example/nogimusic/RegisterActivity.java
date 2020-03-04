@@ -1,5 +1,7 @@
 package com.example.nogimusic;
 
+import android.content.Intent;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,6 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.List;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -69,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }else if (TextUtils.isEmpty(age)){
                     Toast.makeText(RegisterActivity.this, "请输入年龄", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(RegisterActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "请稍后", Toast.LENGTH_SHORT).show();
                     sendrequest();
                 }
         }
@@ -96,11 +103,46 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Response response = client.newCall(request).execute();
                     String data = response.body().string();
                     Log.d("NMSL", data);
-                    //parsejson(data); //解析服务端返回的值
+                    parsejson(data); //解析服务端返回的值
                 } catch (Exception e){
                     e.printStackTrace();
                 }
             }
         }).start();
+    }
+
+    public void parsejson(String jsondata){ //使用GSON解析服务端返回的json数据
+        Gson gson = new Gson();
+        List<login_result> resultsList = gson.fromJson(jsondata, new TypeToken<List<login_result>>(){}.getType());
+        for (login_result result : resultsList){
+            Global_Variable.thisuser.setId(result.id);
+            Global_Variable.thisuser.setAge(result.age);
+            Global_Variable.thisuser.setUsername(result.username);
+            if (result.result.equals("注册成功")){
+                loginback = 1;
+            }else if (result.result.equals("注册失败")){
+                loginback = 0;
+            }
+            Log.d("NMSL", result.result);
+            Log.d("NMSL", result.id);
+            Log.d("NMSL", result.username);
+            if (loginback == 1){
+                Looper.prepare();
+                Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                startActivity(intent);
+                //Log.d("NMSL", "你动啊");
+                Looper.loop();
+            }else if (loginback == 0){
+                Looper.prepare();
+                Toast.makeText(RegisterActivity.this, "注册账号已被人抢注", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }else if (loginback == -1){
+                Looper.prepare();
+                Toast.makeText(RegisterActivity.this, "注册超时", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }
+
+        }
     }
 }
