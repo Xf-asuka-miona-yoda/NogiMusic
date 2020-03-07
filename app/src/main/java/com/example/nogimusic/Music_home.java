@@ -32,7 +32,11 @@ public class Music_home extends Fragment implements OnBannerListener {
     private ArrayList<String> list_title;
 
     private List<home_icon> icList = new ArrayList<>();
+    private List<Music> musicList = new ArrayList<>();
     private HomeicAdapter adapter = new HomeicAdapter(icList);
+    private MusicAdapter musicAdapter;
+
+    HomeActivity homeActivity;
 
     @Nullable
     @Override
@@ -45,9 +49,12 @@ public class Music_home extends Fragment implements OnBannerListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        homeActivity = (HomeActivity) getActivity();  //过早初始化会空指针
         initBanner();
         initicondata();
         initiconadapter();
+        initMusicdata();
+        initmusicadapter();
         setListener();
     }
 
@@ -109,6 +116,16 @@ public class Music_home extends Fragment implements OnBannerListener {
         recyclerView.setAdapter(adapter);
     }
 
+    //初始化音乐适配器
+    public void initmusicadapter(){
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.music_home_random);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(layoutManager);
+        musicAdapter = new MusicAdapter(musicList, view.getContext());
+        recyclerView.setAdapter(musicAdapter);
+    }
+
     //初始化图标数据
     public void initicondata(){
         home_icon singer = new home_icon("歌手", R.mipmap.singer);
@@ -119,12 +136,33 @@ public class Music_home extends Fragment implements OnBannerListener {
         icList.add(fenlei);
     }
 
+    //初始化音乐数据
+    public void initMusicdata(){
+        Music qifenle = new Music("起风了", "吴青峰", Global_Variable.ip + "/NogiMusic/华语流行/起风了.mp3", "http://p1.music.126.net/aMVPsO00OqlVTS2yMH8RgA==/109951163785600029.jpg?param=177y177");
+        musicList.add(qifenle);
+    }
+
     public void setListener(){
         adapter.setmOnItemClickListener(new HomeicAdapter.OnItemClickListener() { //三个图标的事件监听
             @Override
             public void onItemClick(View view, int position) {
                 home_icon ic = icList.get(position);
                 Toast.makeText(view.getContext(), "你点击了"+ic.getIc_name(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        musicAdapter.setmOnItemClickListener(new MusicAdapter.OnItemClickListener(){
+            @Override
+            public void onItemClick(View view, int position) {
+                homeActivity.musicBinder.stop();
+                Music music = musicList.get(position);
+                //Toast.makeText(view.getContext(), "你点击了"+music.getMusic_url(), Toast.LENGTH_SHORT).show();
+                if (!homeActivity.musicQueue.isinclude(music.getMusic_name())){//如果没有才能加入，否则会造成重复
+                    homeActivity.musicQueue.queue.add(music); //加入播放队列
+                }
+                MusicQueue.i = homeActivity.musicQueue.getindex(music.getMusic_name()); //i记录当前是播放队列中的第几个
+                homeActivity.musicBinder.initmediaplayer(MusicQueue.i); //初始化
+                homeActivity.musicBinder.play(); //播放
             }
         });
     }

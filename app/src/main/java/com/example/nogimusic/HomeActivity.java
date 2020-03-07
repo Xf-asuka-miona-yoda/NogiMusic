@@ -1,7 +1,10 @@
 package com.example.nogimusic;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +23,21 @@ public class HomeActivity extends AppCompatActivity {
     private Music_home music_home_fragment;
     private Music_recommend music_recommend_fragment;
     private Social_contact social_contact_fragment;
+
+    MusicQueue musicQueue = new MusicQueue();//播放队列
+    public MusicService.MusicBinder musicBinder;
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            musicBinder = (MusicService.MusicBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
 
     //底部导航栏监听
@@ -53,6 +71,9 @@ public class HomeActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        Intent intent = new Intent(this, MusicService.class);
+        startService(intent);
+        bindService(intent, connection, BIND_AUTO_CREATE);//绑定服务
         initfragment();
         replaceFragment(music_home_fragment);
 
@@ -63,6 +84,8 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this, "悬浮按钮来喽", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     @Override
