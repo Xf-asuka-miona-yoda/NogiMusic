@@ -10,12 +10,13 @@ import android.util.Log;
 public class MusicService extends Service {
     private MusicBinder mbinder = new MusicBinder();
     class MusicBinder extends Binder {
-        MusicQueue musicQueue = new MusicQueue();
+        //MusicQueue musicQueue = new MusicQueue();
         public MediaPlayer mediaPlayer = new MediaPlayer();
         public String musicurl = "";
         public void initmediaplayer(int i){ //用当前播放的初始化播放器
+            Log.d("cao1", Global_Variable.musicplayQueue.queue.get(i).getMusic_url());
             try {
-                musicurl = MusicQueue.queue.get(i).getMusic_url();
+                musicurl = Global_Variable.ip + Global_Variable.musicplayQueue.queue.get(i).getMusic_url();
                 mediaPlayer.setDataSource(musicurl);
                 mediaPlayer.prepare();
                 mediaPlayer.setLooping(true); //循环播放

@@ -3,8 +3,8 @@ package com.example.nogimusic;
 import java.util.Vector;
 
 public class MusicQueue {
-    public static Vector<Music> queue = new Vector<Music>();
-    public static int i = 0; //记录当前播放的下标
+    public Vector<Music> queue = new Vector<Music>();
+    public int i = 0; //记录当前播放的下标
 
     public boolean isinclude(String name){ //如果没有才能加入，否则会造成重复
         for(Music q : queue){

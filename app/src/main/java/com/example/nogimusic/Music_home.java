@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -23,6 +25,12 @@ import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Music_home extends Fragment implements OnBannerListener {
     private View view;
@@ -42,6 +50,7 @@ public class Music_home extends Fragment implements OnBannerListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         icList.clear(); //清空 一定要清空，不然每次切换会重复加载数据
+        sendrequest_mucihome();
         view = inflater.inflate(R.layout.music_home, container, false);
         return view;
     }
@@ -53,9 +62,11 @@ public class Music_home extends Fragment implements OnBannerListener {
         initBanner();
         initicondata();
         initiconadapter();
-        initMusicdata();
+        //sendrequest();
+        //initMusicdata();
         initmusicadapter();
         setListener();
+        musicListener();
     }
 
     public void initBanner(){ //初始化轮播图
@@ -120,7 +131,6 @@ public class Music_home extends Fragment implements OnBannerListener {
     public void initmusicadapter(){
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.music_home_random);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
         musicAdapter = new MusicAdapter(musicList, view.getContext());
         recyclerView.setAdapter(musicAdapter);
@@ -136,10 +146,55 @@ public class Music_home extends Fragment implements OnBannerListener {
         icList.add(fenlei);
     }
 
+
+
     //初始化音乐数据
-    public void initMusicdata(){
-        Music qifenle = new Music("起风了", "吴青峰", Global_Variable.ip + "/NogiMusic/华语流行/起风了.mp3", "http://p1.music.126.net/aMVPsO00OqlVTS2yMH8RgA==/109951163785600029.jpg?param=177y177");
-        musicList.add(qifenle);
+//    public void initMusicdata(){
+////        Music qifenle = new Music("起风了", "吴青峰", Global_Variable.ip + "/NogiMusic/华语流行/起风了.mp3", "http://p1.music.126.net/aMVPsO00OqlVTS2yMH8RgA==/109951163785600029.jpg?param=177y177");
+////        musicList.add(qifenle);
+//        for (int i = 0; i < Global_Variable.musicList_home.size(); i++){
+//            Music music = new Music(Global_Variable.musicList_home.get(i).getMusic_name(), Global_Variable.musicList_home.get(i).getMusic_singer(), Global_Variable.musicList_home.get(i).getMusic_url(), Global_Variable.musicList_home.get(i).getMusic_pic_url());
+//            musicList.add(music);
+//            Log.d("cao", music.getMusic_name());
+//            Log.d("cao", music.getMusic_singer());
+//            Log.d("cao", music.getMusic_url());
+//        }
+//
+//    }
+
+    //发送网络请求
+    public void sendrequest_mucihome(){ //发送音乐请求哦
+        new Thread(new Runnable() { //耗时操作要开子线程
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder() //请求参数
+                            .add("musicnumber", String.valueOf(2)) //获取的音乐数量
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(Global_Variable.ip + "NogiMusic/musichome") //请求url
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String data = response.body().string();
+                    Log.d("NMSL", data);
+                    parsejson_musichome(data); //解析服务端返回的值
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void parsejson_musichome(String jsondata) { //使用GSON解析服务端返回的json数据
+        Gson gson = new Gson();
+        List<musicresult> resultsList = gson.fromJson(jsondata, new TypeToken<List<musicresult>>(){}.getType());
+        for (musicresult musicresult1 : resultsList){
+            Music music = new Music(musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic);
+            musicList.add(music);
+        }
+
     }
 
     public void setListener(){
@@ -151,17 +206,23 @@ public class Music_home extends Fragment implements OnBannerListener {
             }
         });
 
+
+    }
+
+    public void musicListener(){
         musicAdapter.setmOnItemClickListener(new MusicAdapter.OnItemClickListener(){
             @Override
             public void onItemClick(View view, int position) {
                 homeActivity.musicBinder.stop();
                 Music music = musicList.get(position);
                 //Toast.makeText(view.getContext(), "你点击了"+music.getMusic_url(), Toast.LENGTH_SHORT).show();
-                if (!homeActivity.musicQueue.isinclude(music.getMusic_name())){//如果没有才能加入，否则会造成重复
-                    homeActivity.musicQueue.queue.add(music); //加入播放队列
+                if (!Global_Variable.musicplayQueue.isinclude(music.getMusic_name())){//如果没有才能加入，否则会造成重复
+                    Global_Variable.musicplayQueue.queue.add(music); //加入播放队列
                 }
-                MusicQueue.i = homeActivity.musicQueue.getindex(music.getMusic_name()); //i记录当前是播放队列中的第几个
-                homeActivity.musicBinder.initmediaplayer(MusicQueue.i); //初始化
+                int i = Global_Variable.musicplayQueue.getindex(music.getMusic_name()); //i记录当前是播放队列中的第几个
+                Log.d("cao", String.valueOf(i));
+                Log.d("cao", Global_Variable.musicplayQueue.queue.get(i).getMusic_url());
+                homeActivity.musicBinder.initmediaplayer(i); //初始化
                 homeActivity.musicBinder.play(); //播放
             }
         });

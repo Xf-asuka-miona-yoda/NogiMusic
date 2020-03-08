@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                 }else {
                     sendrequest(); //全部符合要求发送登录请求
+
                 }
 
                 break;
@@ -145,4 +146,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+
 }
