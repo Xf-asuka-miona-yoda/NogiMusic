@@ -30,4 +30,8 @@ public class Music {
     public String getMusic_url() {
         return music_url;
     }
+
+    public String getMusic_id() {
+        return music_id;
+    }
 }

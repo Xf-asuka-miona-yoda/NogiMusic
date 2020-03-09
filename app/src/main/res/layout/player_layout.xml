@@ -129,6 +129,14 @@
             android:background="@drawable/bt_shape"
             android:text="收藏"/>
 
+        <Button
+            android:layout_marginLeft="10dp"
+            android:id="@+id/player_pinglun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bt_shape"
+            android:text="评论"/>
+
     </LinearLayout>
 
 </LinearLayout>

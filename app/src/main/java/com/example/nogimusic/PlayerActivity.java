@@ -30,7 +30,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     private TextView musicname,singer;
     private ImageView musicpic;
-    private Button playorpause,shoucang,before,next,method;
+    private Button playorpause,shoucang,before,next,method,pinglun;
 
     private MusicService.MusicBinder musicBinder;
     private ServiceConnection connection = new ServiceConnection() {
@@ -47,7 +47,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 Runnable updateUI = new Runnable() {
                     @Override
                     public void run() {
-
                         musicCur.setText(format.format(musicBinder.mediaPlayer.getCurrentPosition())+"");
                         seekBar.setMax(musicBinder.mediaPlayer.getDuration());
                         musicLength.setText(format.format(musicBinder.mediaPlayer.getDuration())+"");
@@ -99,6 +98,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         next.setOnClickListener(this);
         method = (Button) findViewById(R.id.player_method);
         method.setOnClickListener(this);
+        pinglun = (Button) findViewById(R.id.player_pinglun);
+        pinglun.setOnClickListener(this);
 
         musicLength = (TextView) findViewById(R.id.music_length);
         musicCur = (TextView) findViewById(R.id.music_cur);
@@ -175,6 +176,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 Glide.with(this).load(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_pic_url()).into(musicpic);
                 break;
 
+            case R.id.player_pinglun:
+                Toast.makeText(PlayerActivity.this,Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id() + Global_Variable.thisuser.id,Toast.LENGTH_SHORT).show();
+                break;
             default:
                 break;
         }
