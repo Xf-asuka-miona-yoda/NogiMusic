@@ -94,6 +94,9 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(HomeActivity.this, "悬浮按钮来喽", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(HomeActivity.this, PlayerActivity.class);
+                startActivity(intent1);
+
             }
         });
 
@@ -121,6 +124,12 @@ public class HomeActivity extends AppCompatActivity {
         music_home_fragment = new Music_home();
         music_recommend_fragment = new Music_recommend();
         social_contact_fragment = new Social_contact();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(connection);
     }
 
 

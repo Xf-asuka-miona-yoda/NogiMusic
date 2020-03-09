@@ -191,7 +191,7 @@ public class Music_home extends Fragment implements OnBannerListener {
         Gson gson = new Gson();
         List<musicresult> resultsList = gson.fromJson(jsondata, new TypeToken<List<musicresult>>(){}.getType());
         for (musicresult musicresult1 : resultsList){
-            Music music = new Music(musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic);
+            Music music = new Music(musicresult1.musicid,musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic);
             musicList.add(music);
         }
 
