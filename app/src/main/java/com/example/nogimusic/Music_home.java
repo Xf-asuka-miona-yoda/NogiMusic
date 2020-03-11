@@ -51,6 +51,7 @@ public class Music_home extends Fragment implements OnBannerListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         icList.clear(); //清空 一定要清空，不然每次切换会重复加载数据
         sendrequest_mucihome();
+        musicList.clear();
         view = inflater.inflate(R.layout.music_home, container, false);
         return view;
     }
@@ -170,7 +171,7 @@ public class Music_home extends Fragment implements OnBannerListener {
                 try {
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder() //请求参数
-                            .add("musicnumber", String.valueOf(2)) //获取的音乐数量
+                            .add("musicnumber", String.valueOf(10)) //获取的音乐数量
                             .build();
                     Request request = new Request.Builder()
                             .url(Global_Variable.ip + "NogiMusic/musichome") //请求url
@@ -219,10 +220,10 @@ public class Music_home extends Fragment implements OnBannerListener {
                 if (!Global_Variable.musicplayQueue.isinclude(music.getMusic_name())){//如果没有才能加入，否则会造成重复
                     Global_Variable.musicplayQueue.queue.add(music); //加入播放队列
                 }
-                int i = Global_Variable.musicplayQueue.getindex(music.getMusic_name()); //i记录当前是播放队列中的第几个
-                Log.d("cao", String.valueOf(i));
-                Log.d("cao", Global_Variable.musicplayQueue.queue.get(i).getMusic_url());
-                homeActivity.musicBinder.initmediaplayer(i); //初始化
+                Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.getindex(music.getMusic_name()); //i记录当前是播放队列中的第几个
+                Log.d("cao", String.valueOf(Global_Variable.musicplayQueue.i));
+                Log.d("cao", Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_url());
+                homeActivity.musicBinder.initmediaplayer(Global_Variable.musicplayQueue.i); //初始化
                 homeActivity.musicBinder.play(); //播放
             }
         });

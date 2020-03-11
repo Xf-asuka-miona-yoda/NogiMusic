@@ -137,6 +137,14 @@
             android:background="@drawable/bt_shape"
             android:text="评论"/>
 
+        <Button
+            android:layout_marginLeft="10dp"
+            android:id="@+id/player_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bt_shape"
+            android:text="下载"/>
+
     </LinearLayout>
 
 </LinearLayout>

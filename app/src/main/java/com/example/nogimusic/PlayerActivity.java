@@ -4,8 +4,10 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,10 +16,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import net.sf.json.JSONArray;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,7 +43,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     private TextView musicname,singer;
     private ImageView musicpic;
-    private Button playorpause,shoucang,before,next,method,pinglun;
+    private Button playorpause,shoucang,before,next,method,pinglun,download;
 
     private MusicService.MusicBinder musicBinder;
     private ServiceConnection connection = new ServiceConnection() {
@@ -40,6 +53,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             musicBinder.initmediaplayer(Global_Variable.musicplayQueue.i);
             seekBar.setMax(musicBinder.mediaPlayer.getDuration());
             musicLength.setText(format.format(musicBinder.mediaPlayer.getDuration())+"");
+            musicname.setText(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_name());
+            singer.setText(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_singer());
+            Glide.with(getApplicationContext()).load(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_pic_url()).into(musicpic);
             musicCur.setText("00:00");
             timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -53,7 +69,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                         musicname.setText(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_name());
                         singer.setText(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_singer());
                         Glide.with(getApplicationContext()).load(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_pic_url()).into(musicpic);
-
                     }
                 };
                 @Override
@@ -64,7 +79,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                     }
 
                 }
-            },0,50);
+            },0,100);
         }
 
         @Override
@@ -100,6 +115,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         method.setOnClickListener(this);
         pinglun = (Button) findViewById(R.id.player_pinglun);
         pinglun.setOnClickListener(this);
+        download = (Button) findViewById(R.id.player_download);
+        download.setOnClickListener(this);
 
         musicLength = (TextView) findViewById(R.id.music_length);
         musicCur = (TextView) findViewById(R.id.music_cur);
@@ -161,15 +178,21 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 break;
             case R.id.player_shouchang:
-                Toast.makeText(PlayerActivity.this,"收藏功能开发中",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PlayerActivity.this,"收藏功能开发中",Toast.LENGTH_SHORT).show();
+                sendcollection();
+                break;
+            case R.id.player_download:
+                Toast.makeText(PlayerActivity.this,"下载功能开发中",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.before:
+
                 musicBinder.before();
                 musicname.setText(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_name());
                 singer.setText(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_singer());
                 Glide.with(this).load(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_pic_url()).into(musicpic);
                 break;
             case R.id.next:   //上一首同理即可，后续要增加一下判断是否为最后一个或第一个
+
                 musicBinder.next();
                 musicname.setText(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_name());
                 singer.setText(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_singer());
@@ -188,5 +211,55 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     protected void onDestroy() {
         super.onDestroy();
         unbindService(connection);
+    }
+
+    public void sendcollection(){
+        final String userid = Global_Variable.thisuser.id;
+        final String musicid = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id();
+        new Thread(new Runnable() { //耗时操作要开子线程
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder() //请求参数
+                            .add("method", "addorcancel") //表明类型
+                            .add("userid", userid) //当前用户id
+                            .add("musicid", musicid)//当前歌曲id
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(Global_Variable.ip + "NogiMusic//collection") //请求url
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String data = response.body().string();
+                    Log.d("NMSL", data);
+                    parsejson_colletcion(data); //解析服务端返回的值
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void parsejson_colletcion(String jsondata){
+        Gson gson = new Gson();
+        List<Result> resultsList = gson.fromJson(jsondata, new TypeToken<List<Result>>(){}.getType());
+        for (Result result : resultsList){
+            if (result.result.equals("收藏成功")){
+                Looper.prepare();
+                Toast.makeText(PlayerActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
+                Log.d("NMSL", "收藏ok");
+                Looper.loop();
+            } else if (result.result.equals("取消收藏")){
+                Looper.prepare();
+                Toast.makeText(PlayerActivity.this, "已取消收藏", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }
+        }
+
+    }
+
+    class Result{
+        public String result;
     }
 }

@@ -36,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
     private Music_recommend music_recommend_fragment;
     private Social_contact social_contact_fragment;
 
+
+
     MusicQueue musicQueue = new MusicQueue();//播放队列
     public MusicService.MusicBinder musicBinder;
 
@@ -114,16 +116,39 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void replaceFragment(Fragment fragment){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.homepage, fragment);
-        fragmentTransaction.commit();
+        Global_Variable.fragmentManager = getSupportFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        List<Fragment> list = Global_Variable.fragmentManager.getFragments();
+        for (int i = 0; i < list.size(); i++){
+            Fragment f = list.get(i);
+            if (f != null){
+                Global_Variable.fragmentTransaction.hide(f);
+            }
+        }
+        Global_Variable.fragmentTransaction.show(fragment);
+        Global_Variable.fragmentTransaction.commit();
     }
+
+
 
     private void initfragment(){
         music_home_fragment = new Music_home();
+        Global_Variable.fragmentManager = getSupportFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        Global_Variable.fragmentTransaction.add(R.id.homepage, music_home_fragment);
+        Global_Variable.fragmentTransaction.commit();
+
         music_recommend_fragment = new Music_recommend();
+        Global_Variable.fragmentManager = getSupportFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        Global_Variable.fragmentTransaction.add(R.id.homepage, music_recommend_fragment);
+        Global_Variable.fragmentTransaction.commit();
+
         social_contact_fragment = new Social_contact();
+        Global_Variable.fragmentManager = getSupportFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        Global_Variable.fragmentTransaction.add(R.id.homepage, social_contact_fragment);
+        Global_Variable.fragmentTransaction.commit();
     }
 
     @Override
