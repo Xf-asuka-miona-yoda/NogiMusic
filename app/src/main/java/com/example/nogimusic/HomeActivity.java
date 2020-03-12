@@ -32,9 +32,9 @@ import okhttp3.Response;
 public class HomeActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
-    private Music_home music_home_fragment;
-    private Music_recommend music_recommend_fragment;
-    private Social_contact social_contact_fragment;
+    public Music_home music_home_fragment;
+    public Music_recommend music_recommend_fragment;
+    public Social_contact social_contact_fragment;
 
 
 

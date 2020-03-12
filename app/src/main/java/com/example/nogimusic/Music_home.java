@@ -46,7 +46,7 @@ public class Music_home extends Fragment implements OnBannerListener {
 
     HomeActivity homeActivity;
 
-    AllSinger allSinger;
+    public AllSinger allSinger;
 
     @Nullable
     @Override
@@ -83,10 +83,10 @@ public class Music_home extends Fragment implements OnBannerListener {
         list_path.add(Global_Variable.ip + "NogiMusic/轮播2.jpg");
         list_path.add(Global_Variable.ip + "NogiMusic/轮播3.jpg");
         list_path.add(Global_Variable.ip + "NogiMusic/轮播4.jpg");
-        list_title.add("好好学习");
-        list_title.add("天天向上");
-        list_title.add("热爱劳动");
-        list_title.add("不搞对象");
+        list_title.add("朋友请听好");
+        list_title.add("让我快乐");
+        list_title.add("很久以后");
+        list_title.add("文兆杰全新概念ep");
         //设置内置样式，共有六种可以点入方法内逐一体验使用。
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
         //设置图片加载器，图片加载器在下方
@@ -195,7 +195,7 @@ public class Music_home extends Fragment implements OnBannerListener {
         Gson gson = new Gson();
         List<musicresult> resultsList = gson.fromJson(jsondata, new TypeToken<List<musicresult>>(){}.getType());
         for (musicresult musicresult1 : resultsList){
-            Music music = new Music(musicresult1.musicid,musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic);
+            Music music = new Music(musicresult1.musicid,musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic, "net");
             musicList.add(music);
         }
 

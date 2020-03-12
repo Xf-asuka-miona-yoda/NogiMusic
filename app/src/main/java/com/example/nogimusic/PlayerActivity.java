@@ -21,6 +21,8 @@ import com.google.gson.reflect.TypeToken;
 
 import net.sf.json.JSONArray;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Timer;
@@ -179,10 +181,18 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.player_shouchang:
                 //Toast.makeText(PlayerActivity.this,"收藏功能开发中",Toast.LENGTH_SHORT).show();
-                sendcollection();
+                if (Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getState().equals("local")){
+                    Toast.makeText(PlayerActivity.this, "本地音乐不支持收藏哦", Toast.LENGTH_SHORT).show();
+                }else {
+                    sendcollection();
+                }
                 break;
             case R.id.player_download:
-                Toast.makeText(PlayerActivity.this,"下载功能开发中",Toast.LENGTH_SHORT).show();
+                if (Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getState().equals("local")){
+                    Toast.makeText(PlayerActivity.this, "本地音乐不支持下载哦", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(PlayerActivity.this,"下载功能开发中",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.before:
 
@@ -200,7 +210,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.player_pinglun:
-                Toast.makeText(PlayerActivity.this,Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id() + Global_Variable.thisuser.id,Toast.LENGTH_SHORT).show();
+                if (Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getState().equals("local")){
+                    Toast.makeText(PlayerActivity.this, "本地音乐不支持评论哦", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(PlayerActivity.this,Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id() + Global_Variable.thisuser.id,Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;

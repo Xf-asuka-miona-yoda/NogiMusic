@@ -16,7 +16,11 @@ public class MusicService extends Service {
         public void initmediaplayer(int i){ //用当前播放的初始化播放器
             Log.d("cao1", Global_Variable.musicplayQueue.queue.get(i).getMusic_url());
             try {
-                musicurl = Global_Variable.ip + Global_Variable.musicplayQueue.queue.get(i).getMusic_url();
+                if (Global_Variable.musicplayQueue.queue.get(i).getState().equals("net")){
+                    musicurl = Global_Variable.ip + Global_Variable.musicplayQueue.queue.get(i).getMusic_url();
+                }else if (Global_Variable.musicplayQueue.queue.get(i).getState().equals("local")){
+                    musicurl = Global_Variable.musicplayQueue.queue.get(i).getMusic_url();
+                }
                 mediaPlayer.setDataSource(musicurl);
                 mediaPlayer.prepare();
                 //mediaPlayer.setLooping(true); //循环播放

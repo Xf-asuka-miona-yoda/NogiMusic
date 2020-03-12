@@ -15,6 +15,12 @@
             android:layout_height="match_parent"
             android:text="歌手们" />
 
+        <Button
+            android:id="@+id/singers_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="back"/>
+
         <TextView
             android:layout_marginTop="800dp"
             android:layout_width="match_parent"

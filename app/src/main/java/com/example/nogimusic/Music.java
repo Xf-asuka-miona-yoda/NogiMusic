@@ -6,13 +6,15 @@ public class Music {
     private String music_singer;
     private String music_url;
     private String music_pic_url;
+    private String state;
 
-    public Music(String id, String name, String singer, String url, String pic){
+    public Music(String id, String name, String singer, String url, String pic, String state1){
         this.music_id = id;
         this.music_name = name;
         this.music_singer = singer;
         this.music_pic_url = pic;
         this.music_url = url;
+        this.state = state1;
     }
 
     public String getMusic_name() {
@@ -33,5 +35,9 @@ public class Music {
 
     public String getMusic_id() {
         return music_id;
+    }
+
+    public String getState() {
+        return state;
     }
 }

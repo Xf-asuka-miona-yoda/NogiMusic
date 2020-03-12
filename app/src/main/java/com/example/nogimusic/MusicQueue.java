@@ -17,7 +17,7 @@ public class MusicQueue {
 
 
     public int getindex(String name){
-        Music test = new Music(null,null,null,null,null);
+        Music test = new Music(null,null,null,null,null,null);
         for(int i = 0; i<queue.size(); i++){
             test = queue.get(i);
             if (test.getMusic_name().equals(name) ){
