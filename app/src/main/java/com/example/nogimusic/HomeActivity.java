@@ -67,10 +67,16 @@ public class HomeActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_dashboard:
                     //mTextMessage.setText(R.string.title_dashboard);
+                    if (music_recommend_fragment == null){
+                        initfragment(2);
+                    }
                     replaceFragment(music_recommend_fragment);
                     return true;
                 case R.id.navigation_notifications:
                    // mTextMessage.setText(R.string.title_notifications);
+                    if (social_contact_fragment == null){
+                        initfragment(3);
+                    }
                     replaceFragment(social_contact_fragment);
                     return true;
             }
@@ -88,7 +94,7 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MusicService.class);
         startService(intent);
         bindService(intent, connection, BIND_AUTO_CREATE);//绑定服务
-        initfragment();
+        initfragment(1);
         replaceFragment(music_home_fragment);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -131,25 +137,26 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-    private void initfragment(){
-        music_home_fragment = new Music_home();
-        Global_Variable.fragmentManager = getSupportFragmentManager();
-        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
-        Global_Variable.fragmentTransaction.add(R.id.homepage, music_home_fragment);
-        Global_Variable.fragmentTransaction.commit();
+    private void initfragment(int id){
+        if (id == 1){
+            music_home_fragment = new Music_home();
+            addFragments(music_home_fragment);
+        }else if (id == 2){
+            music_recommend_fragment = new Music_recommend();
+            addFragments(music_recommend_fragment);
+        }else if (id == 3){
+            social_contact_fragment = new Social_contact();
+            addFragments(social_contact_fragment);
+        }
+    }
 
-        music_recommend_fragment = new Music_recommend();
+    public void addFragments(Fragment fragment){
         Global_Variable.fragmentManager = getSupportFragmentManager();
         Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
-        Global_Variable.fragmentTransaction.add(R.id.homepage, music_recommend_fragment);
-        Global_Variable.fragmentTransaction.commit();
-
-        social_contact_fragment = new Social_contact();
-        Global_Variable.fragmentManager = getSupportFragmentManager();
-        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
-        Global_Variable.fragmentTransaction.add(R.id.homepage, social_contact_fragment);
+        Global_Variable.fragmentTransaction.add(R.id.homepage, fragment);
         Global_Variable.fragmentTransaction.commit();
     }
+
 
     @Override
     protected void onDestroy() {

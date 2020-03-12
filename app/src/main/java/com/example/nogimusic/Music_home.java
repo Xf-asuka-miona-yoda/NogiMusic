@@ -46,6 +46,8 @@ public class Music_home extends Fragment implements OnBannerListener {
 
     HomeActivity homeActivity;
 
+    AllSinger allSinger;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,10 +63,11 @@ public class Music_home extends Fragment implements OnBannerListener {
         super.onActivityCreated(savedInstanceState);
         homeActivity = (HomeActivity) getActivity();  //过早初始化会空指针
         initBanner();
+
+        //initfragments();
         initicondata();
         initiconadapter();
-        //sendrequest();
-        //initMusicdata();
+
         initmusicadapter();
         setListener();
         musicListener();
@@ -202,8 +205,12 @@ public class Music_home extends Fragment implements OnBannerListener {
         adapter.setmOnItemClickListener(new HomeicAdapter.OnItemClickListener() { //三个图标的事件监听
             @Override
             public void onItemClick(View view, int position) {
+                initfragments();
                 home_icon ic = icList.get(position);
                 Toast.makeText(view.getContext(), "你点击了"+ic.getIc_name(), Toast.LENGTH_SHORT).show();
+                if (ic.getIc_name().equals("歌手")){
+                    showfragment(allSinger);
+                }
             }
         });
 
@@ -227,5 +234,31 @@ public class Music_home extends Fragment implements OnBannerListener {
                 homeActivity.musicBinder.play(); //播放
             }
         });
+    }
+
+    public void initfragments(){  //初始化三个fragment
+        allSinger = new AllSinger();
+        addfragment(allSinger);
+    }
+
+    public void addfragment(Fragment fragment){
+        Global_Variable.fragmentManager = getFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        Global_Variable.fragmentTransaction.add(R.id.homepage, fragment);
+        Global_Variable.fragmentTransaction.commit();
+    }
+
+    public void showfragment(Fragment fragment){
+        Global_Variable.fragmentManager = getFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        List<Fragment> list = Global_Variable.fragmentManager.getFragments();
+        for (int i = 0; i < list.size(); i++){
+            Fragment f = list.get(i);
+            if (f != null){
+                Global_Variable.fragmentTransaction.hide(f);
+            }
+        }
+        Global_Variable.fragmentTransaction.show(fragment);
+        Global_Variable.fragmentTransaction.commit();
     }
 }
