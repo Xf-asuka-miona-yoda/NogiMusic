@@ -5,6 +5,7 @@
 
     <ImageView
         android:id="@+id/music_pic"
+        android:layout_marginLeft="10dp"
         android:layout_width="50dp"
         android:layout_height="50dp" />
 
