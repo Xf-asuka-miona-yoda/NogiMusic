@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="25dp"
-            android:text="账 号"
+            android:text="账号"
             android:textSize="25dp" />
 
         <EditText

@@ -44,8 +44,8 @@ public class AllSinger extends Fragment {
 
     public void initsingers(){
         for (int i = 0; i < 20; i++){
-            Singer singer = new Singer(String.valueOf(i), "乃木坂46", "http://y.gtimg.cn/music/photo_new/T001R300x300M000003caGxv3AblUU.jpg?max_age=2592000");
-            Singer singer1 = new Singer(String.valueOf(i+1), "AKB48", "http://y.gtimg.cn/music/photo_new/T001R300x300M000003caGxv3AblUU.jpg?max_age=2592000");
+            Singer singer = new Singer(String.valueOf(i), "乃木坂46", "http://y.gtimg.cn/music/photo_new/T001R300x300M000003caGxv3AblUU.jpg?max_age=2592000", "12");
+            Singer singer1 = new Singer(String.valueOf(i+1), "AKB48", "http://y.gtimg.cn/music/photo_new/T001R300x300M000003caGxv3AblUU.jpg?max_age=2592000", "1");
             singerList.add(singer);
             singerList.add(singer1);
         }

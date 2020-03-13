@@ -173,10 +173,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.player_method:
                 if (musicBinder.mediaPlayer.isLooping()){
                     musicBinder.mediaPlayer.setLooping(false);
-                    method.setText("单曲循环");
+                    Toast.makeText(PlayerActivity.this, "已切换到顺序播放", Toast.LENGTH_SHORT).show();
+                    method.setText("顺序播放");
                 }else {
                     musicBinder.mediaPlayer.setLooping(true);
-                    method.setText("顺序播放");
+                    Toast.makeText(PlayerActivity.this, "已切换到单曲循环", Toast.LENGTH_SHORT).show();
+                    method.setText("单曲循环");
                 }
                 break;
             case R.id.player_shouchang:

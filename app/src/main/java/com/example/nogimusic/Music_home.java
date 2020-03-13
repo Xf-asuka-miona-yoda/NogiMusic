@@ -198,7 +198,7 @@ public class Music_home extends Fragment implements OnBannerListener {
             Music music = new Music(musicresult1.musicid,musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic, "net");
             musicList.add(music);
         }
-
+        musicAdapter.notifyDataSetChanged();
     }
 
     public void setListener(){
@@ -259,6 +259,7 @@ public class Music_home extends Fragment implements OnBannerListener {
             }
         }
         Global_Variable.fragmentTransaction.show(fragment);
+        Global_Variable.fragmentTransaction.addToBackStack(null);
         Global_Variable.fragmentTransaction.commit();
     }
 }
