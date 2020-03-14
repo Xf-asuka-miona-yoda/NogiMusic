@@ -95,6 +95,9 @@ public class HomeActivity extends AppCompatActivity {
         startService(intent);
         bindService(intent, connection, BIND_AUTO_CREATE);//绑定服务
         initfragment(1);
+//        initfragment(2);
+//        initfragment(3);
+//        hideallfragment();
         replaceFragment(music_home_fragment);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -119,6 +122,19 @@ public class HomeActivity extends AppCompatActivity {
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
 
+    }
+
+    public void hideallfragment(){
+        Global_Variable.fragmentManager = getSupportFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        List<Fragment> list = Global_Variable.fragmentManager.getFragments();
+        for (int i = 0; i < list.size(); i++){
+            Fragment f = list.get(i);
+            if (f != null){
+                Global_Variable.fragmentTransaction.hide(f);
+            }
+        }
+        Global_Variable.fragmentTransaction.commit();
     }
 
     private void replaceFragment(Fragment fragment){

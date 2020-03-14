@@ -198,18 +198,27 @@ public class Music_home extends Fragment implements OnBannerListener {
             Music music = new Music(musicresult1.musicid,musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic, "net");
             musicList.add(music);
         }
-        musicAdapter.notifyDataSetChanged();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                musicAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     public void setListener(){
         adapter.setmOnItemClickListener(new HomeicAdapter.OnItemClickListener() { //三个图标的事件监听
             @Override
             public void onItemClick(View view, int position) {
-                initfragments();
+
                 home_icon ic = icList.get(position);
                 Toast.makeText(view.getContext(), "你点击了"+ic.getIc_name(), Toast.LENGTH_SHORT).show();
                 if (ic.getIc_name().equals("歌手")){
+                    if (allSinger == null){
+                        initfragments(1);
+                    }
                     showfragment(allSinger);
+                    //replacefragment(new AllSinger());
                 }
             }
         });
@@ -236,9 +245,20 @@ public class Music_home extends Fragment implements OnBannerListener {
         });
     }
 
-    public void initfragments(){  //初始化三个fragment
-        allSinger = new AllSinger();
-        addfragment(allSinger);
+    public void replacefragment(Fragment fragment){
+        Global_Variable.fragmentManager = getFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        Global_Variable.fragmentTransaction.replace(R.id.homepage,fragment);
+
+        Global_Variable.fragmentTransaction.commit();
+    }
+
+    public void initfragments(int id){  //初始化三个fragment
+        if (id == 1){
+            allSinger = new AllSinger();
+            addfragment(allSinger);
+        }
+
     }
 
     public void addfragment(Fragment fragment){
@@ -259,7 +279,6 @@ public class Music_home extends Fragment implements OnBannerListener {
             }
         }
         Global_Variable.fragmentTransaction.show(fragment);
-        Global_Variable.fragmentTransaction.addToBackStack(null);
         Global_Variable.fragmentTransaction.commit();
     }
 }
