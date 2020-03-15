@@ -15,9 +15,10 @@
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="28dp"
         android:src="@mipmap/ic_play"
+        app:backgroundTint="#FF7F20"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:elevation="8dp"/>
+        app:elevation="8dp" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

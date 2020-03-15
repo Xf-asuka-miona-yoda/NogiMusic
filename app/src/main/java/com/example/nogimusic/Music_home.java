@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -138,6 +139,7 @@ public class Music_home extends Fragment implements OnBannerListener {
         recyclerView.setLayoutManager(layoutManager);
         musicAdapter = new MusicAdapter(musicList, view.getContext());
         recyclerView.setAdapter(musicAdapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),DividerItemDecoration.VERTICAL));
     }
 
     //初始化图标数据

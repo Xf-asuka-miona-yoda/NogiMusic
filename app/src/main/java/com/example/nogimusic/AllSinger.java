@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -55,6 +57,24 @@ public class AllSinger extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         homeActivity = (HomeActivity) getActivity();  //过早初始化会空指针
+        ImageButton back = (ImageButton) view.findViewById(R.id.back_allsinger);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(v.getContext(),"hhh", Toast.LENGTH_SHORT).show();
+                Global_Variable.fragmentManager = getFragmentManager();
+                Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+                List<Fragment> list = Global_Variable.fragmentManager.getFragments();
+                for (int i = 0; i < list.size(); i++){
+                    Fragment f = list.get(i);
+                    if (f != null){
+                        Global_Variable.fragmentTransaction.hide(f);
+                    }
+                }
+                Global_Variable.fragmentTransaction.show(homeActivity.music_home_fragment);
+                Global_Variable.fragmentTransaction.commit();
+            }
+        });
         //initsingers();
         sendrequest();
         initSingerAdapter();
@@ -72,6 +92,7 @@ public class AllSinger extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         singerAdapter = new SingerAdapter(singerList, view.getContext());
         recyclerView.setAdapter(singerAdapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),DividerItemDecoration.VERTICAL));
     }
 
     public void setListener(){

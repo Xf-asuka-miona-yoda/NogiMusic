@@ -10,12 +10,30 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:text="歌手们"
-            android:textSize="20dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <ImageButton
+                android:id="@+id/back_allsinger"
+                android:layout_marginLeft="5dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@mipmap/back"
+                android:src="@mipmap/back"
+                android:scaleType="centerCrop"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:text="歌手们"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/allsinger"
