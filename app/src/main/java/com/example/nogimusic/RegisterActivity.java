@@ -25,15 +25,18 @@ import okhttp3.Response;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button new_register;
+
     private EditText re_account;
     private EditText re_username;
     private EditText re_password;
     private EditText re_age;
+    private EditText re_safe;
 
     private String account;
     private String username;
     private String password;
     private String age;
+    private String safe;
 
     private int loginback = -1; //登录标志位
 
@@ -53,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         re_username = (EditText) findViewById(R.id.register_username);
         re_password = (EditText) findViewById(R.id.register_password);
         re_age = (EditText) findViewById(R.id.register_age);
+        re_safe = (EditText) findViewById(R.id.register_safe);
     }
 
     public void setlistener(){
@@ -67,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 username = re_username.getText().toString();
                 password = re_password.getText().toString();
                 age = re_age.getText().toString();
+                safe = re_safe.getText().toString();
                 if (TextUtils.isEmpty(account)){ //首先要判断账号和密码是否为空
                     Toast.makeText(RegisterActivity.this, "请输入账号", Toast.LENGTH_SHORT).show();
                 }else if (TextUtils.isEmpty(username)){
@@ -75,7 +80,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(RegisterActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                 }else if (TextUtils.isEmpty(age)){
                     Toast.makeText(RegisterActivity.this, "请输入年龄", Toast.LENGTH_SHORT).show();
-                }else {
+                } else if (TextUtils.isEmpty(safe)) {
+                    Toast.makeText(RegisterActivity.this, "请输入安全问题", Toast.LENGTH_SHORT).show();
+                } else {
                     Toast.makeText(RegisterActivity.this, "请稍后", Toast.LENGTH_SHORT).show();
                     sendrequest();
                 }
@@ -95,6 +102,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             .add("ResgisterUsername", username)
                             .add("ResgisterPassword", password)
                             .add("ResgisterAge", age)
+                            .add("ResgisterSafe",safe)
                             .build();
                     Request request = new Request.Builder()
                             .url(Global_Variable.ip + "NogiMusic/register") //请求url

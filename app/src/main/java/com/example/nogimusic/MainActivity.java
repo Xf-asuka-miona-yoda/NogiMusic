@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button login;
     private Button register;
+    private Button findpassword;
     private EditText username;
     private EditText password;
     private String input_account;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void initview(){
         login = (Button) findViewById(R.id.button_login);
         register = (Button) findViewById(R.id.button_register);
+        findpassword = (Button) findViewById(R.id.button_findpassword);
         username = (EditText) findViewById(R.id.input_username);
         password = (EditText) findViewById(R.id.input_password);
     }
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setlistener(){
         login.setOnClickListener(this);
         register.setOnClickListener(this);
+        findpassword.setOnClickListener(this);
     }
 
     //响应按钮点击事件监听
@@ -74,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     sendrequest(); //全部符合要求发送登录请求
 
                 }
-
                 break;
             case R.id.button_register:
                 Toast.makeText(MainActivity.this, "注册", Toast.LENGTH_SHORT).show();
@@ -82,6 +84,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 break;
+
+            case R.id.button_findpassword:
+                Toast.makeText(MainActivity.this, "找回密码", Toast.LENGTH_SHORT).show();
+                //Log.d("NMSL", Global_Variable.thisuser.id);
+                Intent intent1 = new Intent(MainActivity.this, FindpasswordActivity.class);
+                startActivity(intent1);
+
             default:
                 break;
         }

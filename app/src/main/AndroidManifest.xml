@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PlayerActivity"></activity>
+        <activity android:name=".FindpasswordActivity"></activity>
+        <activity android:name=".PlayerActivity" />
 
         <service
             android:name=".MusicService"
