@@ -139,7 +139,7 @@ public class Music_home extends Fragment implements OnBannerListener {
         recyclerView.setLayoutManager(layoutManager);
         musicAdapter = new MusicAdapter(musicList, view.getContext());
         recyclerView.setAdapter(musicAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),DividerItemDecoration.VERTICAL)); //分割线
     }
 
     //初始化图标数据

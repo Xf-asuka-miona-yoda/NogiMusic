@@ -35,6 +35,8 @@ public class AllSinger extends Fragment {
     private View view;
     HomeActivity homeActivity;
 
+    private SIngerinfo sIngerinfo;
+
     private List<Singer> singerList = new ArrayList<>();
     private SingerAdapter singerAdapter;
 
@@ -104,6 +106,11 @@ public class AllSinger extends Fragment {
 //                Singer singer1 = new Singer(String.valueOf(1), "乃木坂46", "http://y.gtimg.cn/music/photo_new/T001R300x300M000003caGxv3AblUU.jpg?max_age=2592000", "12");
 //                singerList.add(singer1);
 //                singerAdapter.notifyDataSetChanged();
+                if (sIngerinfo == null){
+                    initfragments();
+                }
+                sIngerinfo.setinfo(singer.getSingerid(),singer.getSingername(),singer.getSinger_in(),singer.getSingerpicurl());
+                showfragment(sIngerinfo);
             }
         });
     }
@@ -155,5 +162,31 @@ public class AllSinger extends Fragment {
         public String singername;
         public String singerpicurl;
         public String singer_in;
+    }
+
+    public void initfragments(){  //初始化三个fragment
+        sIngerinfo = new SIngerinfo();
+        addfragment(sIngerinfo);
+    }
+
+    public void addfragment(Fragment fragment){
+        Global_Variable.fragmentManager = getFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        Global_Variable.fragmentTransaction.add(R.id.homepage, fragment);
+        Global_Variable.fragmentTransaction.commit();
+    }
+
+    public void showfragment(Fragment fragment){
+        Global_Variable.fragmentManager = getFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        List<Fragment> list = Global_Variable.fragmentManager.getFragments();
+        for (int i = 0; i < list.size(); i++){
+            Fragment f = list.get(i);
+            if (f != null){
+                Global_Variable.fragmentTransaction.hide(f);
+            }
+        }
+        Global_Variable.fragmentTransaction.show(fragment);
+        Global_Variable.fragmentTransaction.commit();
     }
 }
