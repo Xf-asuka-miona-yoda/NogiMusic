@@ -95,19 +95,16 @@ public class HomeActivity extends AppCompatActivity {
         startService(intent);
         bindService(intent, connection, BIND_AUTO_CREATE);//绑定服务
         initfragment(1);
-//        initfragment(2);
-//        initfragment(3);
-//        hideallfragment();
+
         replaceFragment(music_home_fragment);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeActivity.this, "悬浮按钮来喽", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomeActivity.this, "悬浮按钮来喽", Toast.LENGTH_SHORT).show();
                 Intent intent1 = new Intent(HomeActivity.this, PlayerActivity.class);
                 startActivity(intent1);
-
             }
         });
 

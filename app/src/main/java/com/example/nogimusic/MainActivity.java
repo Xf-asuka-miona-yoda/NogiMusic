@@ -2,6 +2,7 @@ package com.example.nogimusic;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,6 +43,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
+        input_account = preferences.getString("account","");
+        input_password = preferences.getString("password","");
+        if (input_password != null && input_account != null){ //自动登录
+            sendrequest();
+        }
         initview();
         setlistener();
     }
@@ -75,7 +83,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                 }else {
                     sendrequest(); //全部符合要求发送登录请求
-
+                    SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
+                    editor.putString("account", input_account);
+                    editor.putString("password", input_password);
+                    editor.apply();
                 }
                 break;
             case R.id.button_register:
