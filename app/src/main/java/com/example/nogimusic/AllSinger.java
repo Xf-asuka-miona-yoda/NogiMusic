@@ -102,10 +102,6 @@ public class AllSinger extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Singer singer = singerList.get(position);
-                Toast.makeText(view.getContext(), "你点击了" + singer.getSingerid() + singer.getSingername(), Toast.LENGTH_SHORT).show();
-//                Singer singer1 = new Singer(String.valueOf(1), "乃木坂46", "http://y.gtimg.cn/music/photo_new/T001R300x300M000003caGxv3AblUU.jpg?max_age=2592000", "12");
-//                singerList.add(singer1);
-//                singerAdapter.notifyDataSetChanged();
                 if (sIngerinfo == null){
                     initfragments();
                 }

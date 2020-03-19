@@ -49,6 +49,7 @@ public class Music_home extends Fragment implements OnBannerListener {
 
     public AllSinger allSinger;
     public Ranking ranking;
+    public Classification classification;
 
     @Nullable
     @Override
@@ -227,6 +228,11 @@ public class Music_home extends Fragment implements OnBannerListener {
                         initfragments(2);
                     }
                     showfragment(ranking);
+                }else if (ic.getIc_name().equals("歌曲分类")){
+                    if (classification == null){
+                        initfragments(3);
+                    }
+                    showfragment(classification);
                 }
             }
         });
@@ -268,6 +274,9 @@ public class Music_home extends Fragment implements OnBannerListener {
         }else if (id == 2){
             ranking = new Ranking();
             addfragment(ranking);
+        }else if (id == 3){
+            classification = new Classification();
+            addfragment(classification);
         }
 
     }
