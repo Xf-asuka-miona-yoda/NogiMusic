@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
         input_account = preferences.getString("account","");
         input_password = preferences.getString("password","");
-        if (input_password != null && input_account != null){ //自动登录
+        Boolean auto = preferences.getBoolean("auto", false);
+        if (auto){ //自动登录
             sendrequest();
         }
         initview();
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
                     editor.putString("account", input_account);
                     editor.putString("password", input_password);
+                    editor.putBoolean("auto", true);
                     editor.apply();
                 }
                 break;
