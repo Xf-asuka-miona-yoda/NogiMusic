@@ -19,10 +19,6 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import net.sf.json.JSONArray;
-
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Timer;
@@ -216,6 +212,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(PlayerActivity.this, "本地音乐不支持评论哦", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(PlayerActivity.this,Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id() + Global_Variable.thisuser.id,Toast.LENGTH_SHORT).show();
+                    String musicname = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_name();
+                    String musicid = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id();
+                    Intent intent_comments = new Intent(PlayerActivity.this, CommentsActivity.class);
+                    intent_comments.putExtra("musicname", musicname);
+                    intent_comments.putExtra("musicid", musicid);
+                    startActivity(intent_comments);
                 }
                 break;
             default:
