@@ -244,6 +244,9 @@ public class Music_home extends Fragment implements OnBannerListener {
         musicAdapter.setmOnItemClickListener(new MusicAdapter.OnItemClickListener(){
             @Override
             public void onItemClick(View view, int position) {
+//                if (view.getId() == R.id.music_pic){ //子项的点击事件
+//                    Toast.makeText(view.getContext(),"图片",Toast.LENGTH_SHORT).show();
+//                }
                 homeActivity.musicBinder.stop();
                 Music music = musicList.get(position);
                 //Toast.makeText(view.getContext(), "你点击了"+music.getMusic_url(), Toast.LENGTH_SHORT).show();
@@ -257,6 +260,7 @@ public class Music_home extends Fragment implements OnBannerListener {
                 homeActivity.musicBinder.play(); //播放
             }
         });
+
     }
 
     public void replacefragment(Fragment fragment){
