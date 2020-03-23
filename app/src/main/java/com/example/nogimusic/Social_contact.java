@@ -65,9 +65,9 @@ public class Social_contact extends Fragment {
         getdynamic();
         initdyadapter();
         setlisthen();
-        for (int i = 0; i < 10; i++){
-            initdata();
-        }
+//        for (int i = 0; i < 10; i++){
+//            initdata();
+//        }
 
         /**
          * 本地广播相关操作

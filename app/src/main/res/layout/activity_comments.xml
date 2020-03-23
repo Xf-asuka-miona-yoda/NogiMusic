@@ -33,8 +33,9 @@
         <EditText
             android:id="@+id/my_comment"
             android:layout_width="300dp"
+            android:background="@drawable/edittext_background"
             android:layout_height="wrap_content"
-            android:hint="快来分享你的感受吧" />
+            android:hint=" 快来分享你的感受吧" />
 
         <Button
             android:id="@+id/comment_commit"

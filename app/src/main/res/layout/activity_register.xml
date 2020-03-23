@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ADD8E6"
+    android:background="@mipmap/background"
     tools:context=".RegisterActivity"
     >
 
@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
 
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -23,17 +23,17 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
             android:layout_marginTop="25dp"
             android:text="账号"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/register_account"
@@ -41,24 +41,26 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="25dp"
-            android:hint="@string/inputhint"
+            android:hint=" 请输入您的账号"
+            android:background="@drawable/edittext_background"
             android:maxLines="1"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+
             android:layout_marginTop="25dp"
             android:text="昵称"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/register_username"
@@ -66,24 +68,25 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="25dp"
-            android:hint="请输入您用于显示的昵称"
+            android:hint=" 请输入您用于显示的昵称"
+            android:background="@drawable/edittext_background"
             android:maxLines="1"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
             android:layout_marginTop="25dp"
             android:text="密码"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/register_password"
@@ -91,25 +94,27 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="25dp"
-            android:hint="请输入您的密码"
+            android:hint=" 请输入您的密码"
+            android:background="@drawable/edittext_background"
             android:inputType="textPassword"
             android:maxLines="1"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+
             android:layout_marginTop="25dp"
             android:text="年龄"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/register_age"
@@ -117,34 +122,37 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="25dp"
-            android:hint="请输入您的出生年份"
+            android:hint=" 请输入您的出生年份"
+            android:background="@drawable/edittext_background"
             android:maxLines="1"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="25dp"
-        android:text="安全问题"
-        android:textSize="15dp" />
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/register_safe"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="25dp"
-        android:hint="您的启蒙老师是？"
-        android:maxLines="1"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="25dp"
+            android:text="安全问题"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/register_safe"
+            android:layout_width="208dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/edittext_background"
+            android:hint=" 您的启蒙老师是？"
+            android:maxLines="1"
+            android:textSize="20sp" />
 
 </LinearLayout>
 

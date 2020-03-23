@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ADD8E6"
+    android:background="@mipmap/background"
     tools:context=".MainActivity">
 
     <TextView
@@ -17,7 +17,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:text="@string/app_name"
-        android:textSize="35dp"
+        android:textSize="30sp"
         android:typeface="serif" />
     
     <ImageView
@@ -28,7 +28,7 @@
         android:src="@mipmap/logo"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center">
@@ -36,10 +36,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
             android:layout_marginTop="25dp"
             android:text="账号"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/input_username"
@@ -47,23 +46,24 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="25dp"
-            android:hint="@string/inputhint"
+            android:hint=" 请输入您的账号"
             android:maxLines="1"
-            android:textSize="25dp" />
+            android:textSize="20sp"
+            android:background="@drawable/edittext_background"/>
 
-    </LinearLayout>
+    </LinearLayout>s
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
             android:layout_marginTop="15dp"
             android:text="密码"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/input_password"
@@ -71,10 +71,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="15dp"
-            android:hint="@string/passwordhint"
+            android:hint=" 请输入您的登录密码"
             android:inputType="textPassword"
+            android:background="@drawable/edittext_background"
             android:maxLines="1"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -88,16 +89,15 @@
             android:layout_width="305dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
             android:background="@drawable/bt_shape"
             android:text="登录"
             android:textColor="#ffffffff" />
 
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_gravity="center">
@@ -106,7 +106,6 @@
                 android:layout_width="128dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginLeft="50dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/bt_shape"
                 android:text="新用户注册"
