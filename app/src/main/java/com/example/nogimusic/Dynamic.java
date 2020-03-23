@@ -1,6 +1,8 @@
 package com.example.nogimusic;
 
 public class Dynamic {
+    private String dyid;
+    private String userid; //用户id
     private String username; //用户昵称
     private String content; //内容
     private String year;
@@ -13,7 +15,9 @@ public class Dynamic {
     private String pinglun; //评论数
     private String dianzan; //点赞数
 
-    public Dynamic(String name, String input_content, int year, int month, int date, int hour, int minute, int second, String zhuan, String ping, String zan){
+    public Dynamic(String dyid, String id, String name, String input_content, int year, int month, int date, int hour, int minute, int second, String zhuan, String ping, String zan){
+        this.dyid = dyid;
+        this.userid = id;
         this.username = name;
         this.content = input_content;
         this.year = String.valueOf(year);
@@ -25,6 +29,14 @@ public class Dynamic {
         this.pinglun = ping;
         this.zhuanfa = zhuan;
         this.dianzan = zan;
+    }
+
+    public String getDyid() {
+        return dyid;
+    }
+
+    public String getUserid() {
+        return userid;
     }
 
     public String getContent() {
