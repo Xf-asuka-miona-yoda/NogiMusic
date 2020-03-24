@@ -24,7 +24,7 @@
             android:layout_marginLeft="250dp"
             android:background="@drawable/bt_shape"
             android:text="发布动态"
-            android:textColor="#FFFFFFFF"/>
+            android:textColor="#FFFFFFFF" />
 
     </LinearLayout>
 

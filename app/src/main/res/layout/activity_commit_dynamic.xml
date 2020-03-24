@@ -8,8 +8,57 @@
 
     <Button
         android:id="@+id/fabu"
+        android:layout_width="66dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/bt_shape"
         android:text="发布"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:textColor="#FFFFFF"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/commit_cancel"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/commit_cancel"
+        android:layout_width="66dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="221dp"
+        android:background="@drawable/bt_shape"
+        android:text="取消"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/fabu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/my_dy_content"
+        android:layout_width="410dp"
+        android:layout_height="587dp"
+        android:background="@drawable/edittext_background"
+        android:gravity="top"
+        android:hint="来和世界分享你的看法吧"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fabu" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="165dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="69dp"
+        android:text="发布动态"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/fabu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

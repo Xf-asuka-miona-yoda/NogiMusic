@@ -3,6 +3,7 @@ package com.example.nogimusic;
 import android.content.Intent;
 
 import android.os.Looper;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +40,8 @@ public class CommentsActivity extends AppCompatActivity {
     private TextView musicid;
     private EditText mycomment;
     private Button commit;
+    private SwipeRefreshLayout refreshLayout;
+
     private CommentsAdapter commentsAdapter;
     private List<Comment> commentList = new ArrayList<>();
 
@@ -50,7 +53,7 @@ public class CommentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comments);
         Intent intent = getIntent();
         String musicname = intent.getStringExtra("musicname");
-        music_id = intent.getStringExtra("musicid");
+        music_id = intent.getStringExtra("musicid");  //通过intent获取音乐id
         getcomments();
         initview();
         musicid.setText(musicname);
@@ -63,6 +66,8 @@ public class CommentsActivity extends AppCompatActivity {
         musicid = (TextView) findViewById(R.id.music_comments_id);
         mycomment = (EditText) findViewById(R.id.my_comment);
         commit = (Button) findViewById(R.id.comment_commit);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.comment_refresh);
+        refreshLayout.setColorSchemeResources(R.color.colorPrimary);
     }
 
     public void setlistener(){ //设置按钮的事件监听
@@ -83,11 +88,28 @@ public class CommentsActivity extends AppCompatActivity {
                     Toast.makeText(CommentsActivity.this, "请输入评论", Toast.LENGTH_SHORT).show();
                 }else {
                     mycomment.setText("");
-                    Comment comment = new Comment(Global_Variable.thisuser.username, mycontent, year, month + 1, day, hour, minute, second);
-                    commentList.add(comment);
-                    commentsAdapter.notifyDataSetChanged(); //更新界面
+//                    Comment comment = new Comment(Global_Variable.thisuser.id,Global_Variable.thisuser.username, mycontent, year, month + 1, day, hour, minute, second);
+//                    commentList.add(comment);
+//                    commentsAdapter.notifyDataSetChanged(); //更新界面
                     sendmycomments(); //发送至服务端
                 }
+            }
+        });
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                commentList.clear();
+                getcomments();
+                refreshLayout.setRefreshing(false);
+            }
+        });
+
+        commentsAdapter.setmOnItemClickListener(new CommentsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Comment comment = commentList.get(position);
+                Toast.makeText(CommentsActivity.this, "点击了" + comment.getUserid(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -181,6 +203,8 @@ public class CommentsActivity extends AppCompatActivity {
             if (rs.code.equals("success")){
                 Looper.prepare();
                 Toast.makeText(CommentsActivity.this, "发表成功", Toast.LENGTH_SHORT).show();
+                commentList.clear();
+                getcomments();
                 Looper.loop();
             }else if (rs.code.equals("failed")){
                 Looper.prepare();

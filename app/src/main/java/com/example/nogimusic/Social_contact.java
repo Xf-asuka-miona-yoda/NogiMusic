@@ -174,6 +174,10 @@ public class Social_contact extends Fragment {
         public void onReceive(Context context, Intent intent) { //接收到本地广播之后的业务逻辑
             String code = intent.getStringExtra("code");
             Log.d("success", code);
+            if (code.equals("200")){
+                dynamicList.clear();
+                getdynamic();
+            }
         }
     }
 
