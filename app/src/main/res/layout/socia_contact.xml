@@ -21,7 +21,7 @@
             android:id="@+id/commit_dynamic"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="250dp"
+            android:layout_marginLeft="230dp"
             android:background="@drawable/bt_shape"
             android:text="发布动态"
             android:textColor="#FFFFFFFF" />

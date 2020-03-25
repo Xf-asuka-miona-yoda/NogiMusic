@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/zhuanfa"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="15dp"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -62,7 +62,7 @@
 
         <TextView
             android:id="@+id/pinglun"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="25dp"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -70,7 +70,7 @@
 
         <TextView
             android:id="@+id/dianzan"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="25dp"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"

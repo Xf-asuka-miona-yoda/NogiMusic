@@ -78,30 +78,33 @@
         android:layout_marginTop="20dp">
 
 
-        <Button
-            android:layout_marginLeft="10dp"
+        <ImageButton
             android:id="@+id/before"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bt_shape"
-            android:text="上一首"/>
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/befor"
+            android:scaleType="centerCrop"
+            android:text="上一首"
+            android:background="@drawable/bt_shape"/>
 
-        <Button
-            android:layout_marginLeft="10dp"
+        <ImageButton
+            android:layout_marginLeft="20dp"
             android:id="@+id/playorpause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bt_shape"
-            android:text="暂停"/>
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/pause"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bt_shape"/>
 
 
-        <Button
-            android:layout_marginLeft="10dp"
+        <ImageButton
+            android:layout_marginLeft="20dp"
             android:id="@+id/next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bt_shape"
-            android:text="下一首"/>
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/next"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bt_shape"/>
 
 
 
@@ -113,37 +116,41 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp">
 
-        <Button
-            android:layout_marginLeft="10dp"
-            android:id="@+id/player_method"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bt_shape"
-            android:text="顺序播放"/>
+        <ImageButton
 
-        <Button
+            android:id="@+id/player_method"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/shunxu"
+            android:background="@drawable/bt_shape"
+            android:scaleType="centerCrop"/>
+
+        <ImageButton
             android:layout_marginLeft="10dp"
             android:id="@+id/player_shouchang"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@drawable/bt_shape"
-            android:text="收藏"/>
+            android:src="@mipmap/shoucang"
+            android:scaleType="centerCrop"/>
 
-        <Button
+        <ImageButton
             android:layout_marginLeft="10dp"
             android:id="@+id/player_pinglun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bt_shape"
-            android:text="评论"/>
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/pinglun"
+            android:background="#00000000"
+            android:scaleType="centerCrop"/>
 
-        <Button
+        <ImageButton
             android:layout_marginLeft="10dp"
             android:id="@+id/player_download"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@drawable/bt_shape"
-            android:text="下载"/>
+            android:src="@mipmap/download"
+            android:scaleType="centerCrop"/>
 
     </LinearLayout>
 

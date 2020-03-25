@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -119,7 +120,12 @@ public class Social_contact extends Fragment {
                 } else if (view.getId() == R.id.zhuanfa){
                     Toast.makeText(view.getContext(),"点击了转发", Toast.LENGTH_SHORT).show();
                 } else if (view.getId() == R.id.dianzan){
-                    Toast.makeText(view.getContext(),"点击了点赞", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(view.getContext(),"点击了点赞", Toast.LENGTH_SHORT).show();
+                    dianzan(dynamic.getDyid());
+                    int realdianzan = Integer.parseInt(dynamicList.get(position).getDianzan());
+                    realdianzan = realdianzan + 1;
+                    dynamicList.get(position).setDianzan(String.valueOf(realdianzan));
+                    dynamicAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(view.getContext(),"点击了动态" + dynamic.getDyid(), Toast.LENGTH_SHORT).show();
                 }
@@ -179,6 +185,51 @@ public class Social_contact extends Fragment {
                 getdynamic();
             }
         }
+    }
+
+    public void dianzan(final String id){
+        new Thread(new Runnable() { //耗时操作要开子线程
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder() //请求参数
+                            .add("method", "dianzan")
+                            .add("userid", id)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(Global_Variable.ip + "NogiMusic/dynamic") //请求url
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String data = response.body().string();
+                    Log.d("NMSL", data);
+                    parsedianzanjson(data); //解析服务端返回的值
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void parsedianzanjson(String data) {
+        Gson gson = new Gson();
+        List<Result> resultsList = gson.fromJson(data, new TypeToken<List<Result>>(){}.getType());
+        for (Result result : resultsList){
+            if (result.result.equals("点赞成功")){
+                Looper.prepare();
+                Toast.makeText(view.getContext(), "点赞成功", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            } else if (result.result.equals("点赞失败")){
+                Looper.prepare();
+                Toast.makeText(view.getContext(), "点赞失败，稍后尝试", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }
+        }
+    }
+
+    class Result{
+        public String result;
     }
 
     @Override

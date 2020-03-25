@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -41,7 +42,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     private TextView musicname,singer;
     private ImageView musicpic;
-    private Button playorpause,shoucang,before,next,method,pinglun,download;
+    private ImageButton shoucang,pinglun,download;
+    private ImageButton playorpause,before,next,method;
 
     private MusicService.MusicBinder musicBinder;
     private ServiceConnection connection = new ServiceConnection() {
@@ -101,19 +103,19 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initview() {
-        playorpause = (Button) findViewById(R.id.playorpause);
+        playorpause = (ImageButton) findViewById(R.id.playorpause);
         playorpause.setOnClickListener(this);
-        shoucang = (Button) findViewById(R.id.player_shouchang);
+        shoucang = (ImageButton) findViewById(R.id.player_shouchang);
         shoucang.setOnClickListener(this);
-        before = (Button) findViewById(R.id.before);
+        before = (ImageButton) findViewById(R.id.before);
         before.setOnClickListener(this);
-        next = (Button) findViewById(R.id.next);
+        next = (ImageButton) findViewById(R.id.next);
         next.setOnClickListener(this);
-        method = (Button) findViewById(R.id.player_method);
+        method = (ImageButton) findViewById(R.id.player_method);
         method.setOnClickListener(this);
-        pinglun = (Button) findViewById(R.id.player_pinglun);
+        pinglun = (ImageButton) findViewById(R.id.player_pinglun);
         pinglun.setOnClickListener(this);
-        download = (Button) findViewById(R.id.player_download);
+        download = (ImageButton) findViewById(R.id.player_download);
         download.setOnClickListener(this);
 
         musicLength = (TextView) findViewById(R.id.music_length);
@@ -158,23 +160,23 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.playorpause:
                 if (musicBinder.mediaPlayer.isPlaying()){
                     musicBinder.pause();
-                    playorpause.setText("播放");
+                    playorpause.setImageResource(R.mipmap.play);
 
                 }else {
                     musicBinder.play();
-                    playorpause.setText("暂停");
+                    playorpause.setImageResource(R.mipmap.pause);
                 }
                 //监听播放时回调函数
                 break;
             case R.id.player_method:
                 if (musicBinder.mediaPlayer.isLooping()){
                     musicBinder.mediaPlayer.setLooping(false);
-                    Toast.makeText(PlayerActivity.this, "已切换到顺序播放", Toast.LENGTH_SHORT).show();
-                    method.setText("顺序播放");
+                    Toast.makeText(PlayerActivity.this, "已切换到顺序循环", Toast.LENGTH_SHORT).show();
+                    method.setImageResource(R.mipmap.shunxu);
                 }else {
                     musicBinder.mediaPlayer.setLooping(true);
                     Toast.makeText(PlayerActivity.this, "已切换到单曲循环", Toast.LENGTH_SHORT).show();
-                    method.setText("单曲循环");
+                    method.setImageResource(R.mipmap.danqu);
                 }
                 break;
             case R.id.player_shouchang:

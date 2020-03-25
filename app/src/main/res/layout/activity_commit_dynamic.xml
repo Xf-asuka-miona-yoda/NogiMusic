@@ -37,8 +37,8 @@
 
     <EditText
         android:id="@+id/my_dy_content"
-        android:layout_width="410dp"
-        android:layout_height="587dp"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
         android:background="@drawable/edittext_background"
         android:gravity="top"
         android:hint="来和世界分享你的看法吧"

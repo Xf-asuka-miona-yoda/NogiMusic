@@ -63,4 +63,8 @@ public class Dynamic {
     public String getZhuanfa() {
         return zhuanfa;
     }
+
+    public void setDianzan(String dianzan) {
+        this.dianzan = dianzan;
+    }
 }

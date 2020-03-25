@@ -118,8 +118,13 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {  //悬浮按钮监听事件
                 //Toast.makeText(HomeActivity.this, "悬浮按钮来喽", Toast.LENGTH_SHORT).show();
-                Intent intent1 = new Intent(HomeActivity.this, PlayerActivity.class);
-                startActivity(intent1);
+                if (Global_Variable.musicplayQueue.queue.size() == 0){
+                    Toast.makeText(HomeActivity.this, "当前无歌曲播放", Toast.LENGTH_SHORT).show();
+                }else {
+                    Intent intent1 = new Intent(HomeActivity.this, PlayerActivity.class);
+                    startActivity(intent1);
+                }
+
             }
         });
 
