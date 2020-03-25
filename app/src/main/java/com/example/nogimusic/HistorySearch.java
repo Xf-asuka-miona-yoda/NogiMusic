@@ -1,6 +1,10 @@
 package com.example.nogimusic;
 
-public class HistorySearch {
+
+import org.litepal.crud.LitePalSupport;
+
+
+public class HistorySearch extends LitePalSupport {
     private String content;
 
     public String getContent() {
