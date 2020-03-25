@@ -1,6 +1,7 @@
 package com.example.nogimusic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -51,6 +53,8 @@ public class Music_home extends Fragment implements OnBannerListener {
     public Ranking ranking;
     public Classification classification;
 
+    private ImageButton search;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,6 +69,14 @@ public class Music_home extends Fragment implements OnBannerListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         homeActivity = (HomeActivity) getActivity();  //过早初始化会空指针
+        search = (ImageButton) view.findViewById(R.id.home_search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         initBanner();
 
         //initfragments();
