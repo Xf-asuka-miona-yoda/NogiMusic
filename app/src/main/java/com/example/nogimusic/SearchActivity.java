@@ -1,7 +1,12 @@
 package com.example.nogimusic;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -41,15 +46,36 @@ public class SearchActivity extends AppCompatActivity {
     private List<HotSearch> hotSearchList = new ArrayList<>();
     private HotSearchAdapter hotSearchAdapter;
 
+    private List<Music> musicList = new ArrayList<>();
+    private MusicAdapter musicAdapter;
+
     private EditText search;
     private String input_search = "";
     private Button commit_search;
     private ScrollView before;
 
+    public MusicService.MusicBinder musicBinder;
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            musicBinder = (MusicService.MusicBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        Intent intent = new Intent(this, MusicService.class);
+        startService(intent);
+        bindService(intent, connection, BIND_AUTO_CREATE);//绑定服务
 
         LitePal.getDatabase();
         initdata();
@@ -72,6 +98,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
         setlisthen();
+
     }
 
     public void initdata(){
@@ -105,6 +132,13 @@ public class SearchActivity extends AppCompatActivity {
         hotsearchrecy.setLayoutManager(layoutManager);
         hotSearchAdapter = new HotSearchAdapter(hotSearchList);
         hotsearchrecy.setAdapter(hotSearchAdapter);
+
+        RecyclerView musicrecy = (RecyclerView) findViewById(R.id.search_reult_list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        musicrecy.setLayoutManager(linearLayoutManager);
+        musicAdapter = new MusicAdapter(musicList,this);
+        musicrecy.setAdapter(musicAdapter);
+        musicrecy.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL)); //分割线
     }
 
     public void localhistory(){
@@ -160,7 +194,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 HotSearch search = hotSearchList.get(position);
-                Toast.makeText(SearchActivity.this, "点击了" + search.getContent(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SearchActivity.this, "点击了" + search.getContent(), Toast.LENGTH_SHORT).show();
                 input_search = search.getContent();
                 getresult();
             }
@@ -170,14 +204,32 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 HistorySearch search = searchList.get(position);
-                Toast.makeText(SearchActivity.this, "点击了" + search.getContent(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SearchActivity.this, "点击了" + search.getContent(), Toast.LENGTH_SHORT).show();
                 input_search = search.getContent();
                 getresult();
             }
         });
+
+        musicAdapter.setmOnItemClickListener(new MusicAdapter.OnItemClickListener(){
+            @Override
+            public void onItemClick(View view, int position) {
+                musicBinder.stop();
+                Music music = musicList.get(position);
+                //Toast.makeText(view.getContext(), "你点击了"+music.getMusic_url(), Toast.LENGTH_SHORT).show();
+                if (!Global_Variable.musicplayQueue.isinclude(music.getMusic_name())){//如果没有才能加入，否则会造成重复
+                    Global_Variable.musicplayQueue.queue.add(music); //加入播放队列
+                }
+                Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.getindex(music.getMusic_name()); //i记录当前是播放队列中的第几个
+                Log.d("cao", String.valueOf(Global_Variable.musicplayQueue.i));
+                Log.d("cao", Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_url());
+                musicBinder.initmediaplayer(Global_Variable.musicplayQueue.i); //初始化
+                musicBinder.play(); //播放
+            }
+        });
     }
 
-    public void getresult(){
+    public void getresult(){  //获取搜索结果
+        musicList.clear();
         new Thread(new Runnable() { //耗时操作要开子线程
             @Override
             public void run() {
@@ -194,11 +246,37 @@ public class SearchActivity extends AppCompatActivity {
                     Response response = client.newCall(request).execute();
                     String data = response.body().string();
                     Log.d("NMSL", data);
-                    //parsejsonhot(data); //解析服务端返回的值
+                    parsejsonresult(data); //解析服务端返回的值
                 } catch (Exception e){
                     e.printStackTrace();
                 }
             }
         }).start();
     }
+
+    private void parsejsonresult(String data) {
+        Gson gson = new Gson();
+        List<musicresult> resultsList = gson.fromJson(data, new TypeToken<List<musicresult>>(){}.getType());
+        for (musicresult musicresult1 : resultsList){
+            if (musicresult1.musicid.equals("-1")){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(SearchActivity.this,"没有找到你要搜索的歌曲哦，我们已经记录，会尽快补充资源",Toast.LENGTH_LONG).show();
+                    }
+                });
+                break;
+            }
+            Music music = new Music(musicresult1.musicid, musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic, "net");
+            musicList.add(music);
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                musicAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+
 }
