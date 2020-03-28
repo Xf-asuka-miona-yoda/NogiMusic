@@ -70,6 +70,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                     mOnItemClickListener.onItemClick(holder.user_img, pos);
                 }
             });
+
+            holder.content.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = holder.getLayoutPosition();
+                    mOnItemClickListener.onItemClick(holder.content, pos);
+                }
+            });
         }
     }
 

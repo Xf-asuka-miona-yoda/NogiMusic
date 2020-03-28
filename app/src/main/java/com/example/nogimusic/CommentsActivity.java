@@ -95,6 +95,7 @@ public class CommentsActivity extends AppCompatActivity {
                 }
             }
         });
+        
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -109,7 +110,12 @@ public class CommentsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 Comment comment = commentList.get(position);
-                Toast.makeText(CommentsActivity.this, "点击了" + comment.getUserid(), Toast.LENGTH_SHORT).show();
+                if (view.getId() == R.id.user_img){
+                    Toast.makeText(CommentsActivity.this, "点击了" + comment.getUserid(), Toast.LENGTH_SHORT).show();
+                }else if (view.getId() == R.id.comment_content){
+                    Toast.makeText(CommentsActivity.this, "点击了" + comment.getId(), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }

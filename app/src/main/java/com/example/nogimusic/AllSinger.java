@@ -160,7 +160,7 @@ public class AllSinger extends Fragment {
         public String singer_in;
     }
 
-    public void initfragments(){  //初始化三个fragment
+    public void initfragments(){  //初始化fragment
         sIngerinfo = new SIngerinfo();
         addfragment(sIngerinfo);
     }

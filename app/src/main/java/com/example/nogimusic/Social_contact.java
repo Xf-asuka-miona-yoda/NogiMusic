@@ -44,6 +44,8 @@ public class Social_contact extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout; //下拉刷新组件
 
+    private DynamicInfo dynamicInfo;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,6 +130,11 @@ public class Social_contact extends Fragment {
                     dynamicAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(view.getContext(),"点击了动态" + dynamic.getDyid(), Toast.LENGTH_SHORT).show();
+                    if (dynamicInfo == null){
+                        initfragments();
+                    }
+                    dynamicInfo.setinfo(dynamic.getUserid(),dynamic.getDyid(),dynamic.getUsername(),dynamic.gettime(),dynamic.getContent());
+                    showfragment(dynamicInfo);
                 }
             }
         });
@@ -230,6 +237,34 @@ public class Social_contact extends Fragment {
 
     class Result{
         public String result;
+    }
+
+
+
+    public void initfragments(){  //初始化fragment
+        dynamicInfo = new DynamicInfo();
+        addfragment(dynamicInfo);
+    }
+
+    public void addfragment(Fragment fragment){
+        Global_Variable.fragmentManager = getFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        Global_Variable.fragmentTransaction.add(R.id.homepage, fragment);
+        Global_Variable.fragmentTransaction.commit();
+    }
+
+    public void showfragment(Fragment fragment){
+        Global_Variable.fragmentManager = getFragmentManager();
+        Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
+        List<Fragment> list = Global_Variable.fragmentManager.getFragments();
+        for (int i = 0; i < list.size(); i++){
+            Fragment f = list.get(i);
+            if (f != null){
+                Global_Variable.fragmentTransaction.hide(f);
+            }
+        }
+        Global_Variable.fragmentTransaction.show(fragment);
+        Global_Variable.fragmentTransaction.commit();
     }
 
     @Override

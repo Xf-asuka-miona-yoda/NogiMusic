@@ -1,6 +1,7 @@
 package com.example.nogimusic;
 
 public class Comment {
+    private String id;
     private String userid;
     private String username; //用户昵称
     private String content; //内容
@@ -21,6 +22,11 @@ public class Comment {
         this.hour = String.valueOf(hour);
         this.minute = String.valueOf(minute);
         this.second = String.valueOf(second);
+    }
+
+
+    public String getId() {
+        return id;
     }
 
     public String getUserid() {
