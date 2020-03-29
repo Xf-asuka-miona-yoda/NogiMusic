@@ -282,4 +282,33 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     class Result{
         public String result;
     }
+
+    public void chenckcollection(){ // 后续待完善,检查是否已经收藏
+        final String userid = Global_Variable.thisuser.id;
+        final String musicid = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id();
+        new Thread(new Runnable() { //耗时操作要开子线程
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder() //请求参数
+                            .add("method", "check") //表明类型
+                            .add("userid", userid) //当前用户id
+                            .add("musicid", musicid)//当前歌曲id
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(Global_Variable.ip + "NogiMusic//collection") //请求url
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String data = response.body().string();
+                    Log.d("NMSL", data);
+                    parsejson_colletcion(data); //解析服务端返回的值
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
 }

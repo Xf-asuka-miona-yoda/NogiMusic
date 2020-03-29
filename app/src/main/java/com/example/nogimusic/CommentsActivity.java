@@ -95,7 +95,7 @@ public class CommentsActivity extends AppCompatActivity {
                 }
             }
         });
-        
+
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -177,7 +177,8 @@ public class CommentsActivity extends AppCompatActivity {
                 try {
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder() //请求参数
-                            .add("musicid", music_id)
+                            .add("method", "music")
+                            .add("objectid", music_id)
                             .add("userid", Global_Variable.thisuser.id)
                             .add("content", mycontent)
                             .add("year", String.valueOf(year))

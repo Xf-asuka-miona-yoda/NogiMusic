@@ -4,7 +4,7 @@
     <padding
         android:left="5dip"
         android:top="2dip"
-        android:right="1dip"
+        android:right="5dip"
         android:bottom="2dip"/>
 
     <solid android:color="#FCFCFC" />
