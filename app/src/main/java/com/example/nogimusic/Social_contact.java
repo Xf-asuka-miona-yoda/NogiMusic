@@ -119,6 +119,10 @@ public class Social_contact extends Fragment {
                 Dynamic dynamic = dynamicList.get(position);
                 if (view.getId() == R.id.dy_user_img){
                     Toast.makeText(view.getContext(),"点击了用户id" + dynamic.getUserid(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), Userinfo.class);
+                    intent.putExtra("userid", dynamic.getUserid());
+                    startActivity(intent);
+
                 } else if (view.getId() == R.id.zhuanfa){
                     Toast.makeText(view.getContext(),"点击了转发", Toast.LENGTH_SHORT).show();
                 } else if (view.getId() == R.id.dianzan){

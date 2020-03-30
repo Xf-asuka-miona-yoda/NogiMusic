@@ -112,6 +112,9 @@ public class CommentsActivity extends AppCompatActivity {
                 Comment comment = commentList.get(position);
                 if (view.getId() == R.id.user_img){
                     Toast.makeText(CommentsActivity.this, "点击了" + comment.getUserid(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CommentsActivity.this, Userinfo.class);
+                    intent.putExtra("userid", comment.getUserid());
+                    startActivity(intent);
                 }else if (view.getId() == R.id.comment_content){
                     Toast.makeText(CommentsActivity.this, "点击了" + comment.getId(), Toast.LENGTH_SHORT).show();
                 }

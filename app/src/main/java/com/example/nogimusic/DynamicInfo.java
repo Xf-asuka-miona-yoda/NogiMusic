@@ -152,6 +152,9 @@ public class DynamicInfo extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(view.getContext(),"点击了" + userid,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), Userinfo.class);
+                intent.putExtra("userid", userid);
+                startActivity(intent);
             }
         });
 
@@ -186,6 +189,9 @@ public class DynamicInfo extends Fragment {
                 Comment comment = commentList.get(position);
                 if (view.getId() == R.id.user_img){
                     Toast.makeText(view.getContext(), "点击了" + comment.getUserid(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), Userinfo.class);
+                    intent.putExtra("userid", comment.getUserid());
+                    startActivity(intent);
                 }else if (view.getId() == R.id.comment_content){
                     Toast.makeText(view.getContext(), "点击了" + comment.getId(), Toast.LENGTH_SHORT).show();
                 }
