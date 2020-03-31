@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -46,6 +48,8 @@ public class Social_contact extends Fragment {
 
     private DynamicInfo dynamicInfo;
 
+    private CheckBox onlycare;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,6 +66,21 @@ public class Social_contact extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CommitDynamic.class);
                 startActivity(intent);
+            }
+        });
+
+        onlycare = (CheckBox) view.findViewById(R.id.only_care);
+        onlycare.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    Toast.makeText(view.getContext(), "XUANZ", Toast.LENGTH_SHORT).show();
+                    dynamicList.clear();
+                    getcaredynamic();
+                } else {
+                    dynamicList.clear();
+                    getdynamic();
+                }
             }
         });
 
@@ -92,7 +111,11 @@ public class Social_contact extends Fragment {
             @Override
             public void onRefresh() {
                 dynamicList.clear();
-                getdynamic();
+                if (onlycare.isChecked()){
+                    getcaredynamic();
+                }else {
+                    getdynamic();
+                }
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -168,6 +191,33 @@ public class Social_contact extends Fragment {
             }
         }).start();
     }
+
+
+    public void getcaredynamic(){
+        new Thread(new Runnable() { //耗时操作要开子线程
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder() //请求参数
+                            .add("method", "care")
+                            .add("userid", Global_Variable.thisuser.id)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(Global_Variable.ip + "NogiMusic/dynamic") //请求url
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String data = response.body().string();
+                    Log.d("NMSL", data);
+                    parsedynamicjson(data); //解析服务端返回的值
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
 
     private void parsedynamicjson(String data) {
         Gson gson = new Gson();

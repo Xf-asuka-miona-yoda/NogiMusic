@@ -1,8 +1,12 @@
 package com.example.nogimusic;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +39,10 @@ public class Userinfo extends AppCompatActivity {
     private List<Dynamic> dynamicList = new ArrayList<>();
     private DynamicAdapter dynamicAdapter;
 
+    private LocalBroadcastManager localBroadcastManager; //本地广播管理器
+    private LocalRecevier localRecevier;
+    private IntentFilter intentFilter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +53,27 @@ public class Userinfo extends AppCompatActivity {
         getuser();
         getcare();
         getuserdynamic();
+
+        /**
+         * 本地广播相关操作
+         */
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("dynamic_commit_success");
+        localRecevier = new LocalRecevier();
+        localBroadcastManager.registerReceiver(localRecevier,intentFilter);//注册本地广播监听器
+    }
+
+    class LocalRecevier extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) { //接收到本地广播之后的业务逻辑
+            String code = intent.getStringExtra("code");
+            Log.d("success", code);
+            if (code.equals("200")){
+                dynamicList.clear();
+                getuserdynamic();
+            }
+        }
     }
 
 
@@ -84,6 +113,13 @@ public class Userinfo extends AppCompatActivity {
                     dynamicAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(view.getContext(),"点击了动态" + dynamic.getDyid(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Userinfo.this,DynamicinfoActivity.class);
+                    intent.putExtra("username", dynamic.getUsername());
+                    intent.putExtra("userid", dynamic.getUserid());
+                    intent.putExtra("dyid", dynamic.getDyid());
+                    intent.putExtra("time", dynamic.gettime());
+                    intent.putExtra("content", dynamic.getContent());
+                    startActivity(intent);
                 }
             }
         });
