@@ -77,9 +77,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                         seekBar.setProgress(musicBinder.mediaPlayer.getCurrentPosition());
                         runOnUiThread(updateUI);
                     }
-
                 }
-            },0,100);
+            },0,200);
         }
 
         @Override

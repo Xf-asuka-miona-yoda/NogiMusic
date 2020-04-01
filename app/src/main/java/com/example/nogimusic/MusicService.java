@@ -7,6 +7,12 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class MusicService extends Service {
     private MusicBinder mbinder = new MusicBinder();
     class MusicBinder extends Binder {
@@ -31,6 +37,7 @@ public class MusicService extends Service {
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+                    history();
                     next();
                 }
             });
@@ -50,7 +57,6 @@ public class MusicService extends Service {
 
         public void stop(){
             mediaPlayer.reset();
-
         }
 
         public void next(){
@@ -82,6 +88,31 @@ public class MusicService extends Service {
     public MusicService() {
     }
 
+
+    public void history(){
+        new Thread(new Runnable() { //耗时操作要开子线程
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder() //请求参数
+                            .add("musicid", Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id())
+                            .add("userid", Global_Variable.thisuser.id)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(Global_Variable.ip + "NogiMusic/history") //请求url
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String data = response.body().string();
+                    Log.d("NMSL", data);
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 
 
 
