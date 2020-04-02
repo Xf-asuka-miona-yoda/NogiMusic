@@ -10,8 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Userinfo"></activity>
-        <activity android:name=".DynamicinfoActivity"/>
+        <activity android:name=".CoComment"></activity>
+        <activity android:name=".Userinfo" />
+        <activity android:name=".DynamicinfoActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".CommitDynamic" />
         <activity android:name=".CommentsActivity" />
@@ -34,9 +35,9 @@
             android:enabled="true"
             android:exported="true" />
     </application>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

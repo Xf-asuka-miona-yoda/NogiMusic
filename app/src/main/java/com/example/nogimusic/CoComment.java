@@ -1,22 +1,17 @@
 package com.example.nogimusic;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -39,8 +33,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DynamicInfo extends Fragment {
-    private View view;
+public class CoComment extends AppCompatActivity {
 
     private TextView info_name;
     private TextView info_time;
@@ -56,17 +49,10 @@ public class DynamicInfo extends Fragment {
     private String dyid;
     private String dyinfo_comment;
 
+    private String replyid;
+
     private SwipeRefreshLayout refreshLayout;
 
-    private LocalBroadcastManager localBroadcastManager; //本地广播
-
-    private List<Comment> commentList = new ArrayList<>();
-    private CommentsAdapter commentsAdapter;
-
-    private int year,month,day,hour,minute,second;
-
-
-    HomeActivity homeActivity;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -96,63 +82,59 @@ public class DynamicInfo extends Fragment {
         handler.sendMessage(message);
     }
 
+    private List<Comment> commentList = new ArrayList<>();
+    private CommentsAdapter commentsAdapter;
+
+    private int year,month,day,hour,minute,second;
+
     public void initadapter(){ //初始化适配器
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.dycommnet_show);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cocommnet_show);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         commentsAdapter = new CommentsAdapter(commentList);
         recyclerView.setAdapter(commentsAdapter);
     }
 
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.dynamicinfo_layout, container, false);
-        initview();
-        initadapter();
-        return view;
-    }
-
     public void initview(){
-        info_content = (TextView) view.findViewById(R.id.dyinfo_content);
-        info_name = (TextView) view.findViewById(R.id.dyinfo_username);
-        info_time = (TextView) view.findViewById(R.id.dyinfo_time);
-        info_user = (ImageView) view.findViewById(R.id.dyinfo_user_img);
-        dyinfo_input = (EditText) view.findViewById(R.id.dyinfo_comment);
-        dyinfo_commit = (Button) view.findViewById(R.id.dyinfo_comment_commit);
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.dy_info_refresh);
+        info_content = (TextView) findViewById(R.id.coinfo_content);
+        info_name = (TextView) findViewById(R.id.coinfo_username);
+        info_time = (TextView) findViewById(R.id.coinfo_time);
+        info_user = (ImageView) findViewById(R.id.coinfo_user_img);
+        dyinfo_input = (EditText) findViewById(R.id.coinfo_comment);
+        dyinfo_commit = (Button) findViewById(R.id.coinfo_comment_commit);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.co_info_refresh);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        homeActivity = (HomeActivity) getActivity();  //过早初始化会空指针
-        localBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
-        ImageButton back = (ImageButton) view.findViewById(R.id.backto_socia);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_co_comment);
+        initview();
+        Intent intent = getIntent();
+        String getid = intent.getStringExtra("coid");
+        String getuserid = intent.getStringExtra("userid");
+        String getname = intent.getStringExtra("username");
+        String gettime = intent.getStringExtra("time");
+        String getcontent = intent.getStringExtra("content");
+
+        setinfo(getuserid,getid,getname,gettime,getcontent);
+
+        initadapter();
+
+        ImageButton back = (ImageButton) findViewById(R.id.backto_dyinfo);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Global_Variable.fragmentManager = getFragmentManager();
-                Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
-                List<Fragment> list = Global_Variable.fragmentManager.getFragments();
-                for (int i = 0; i < list.size(); i++){
-                    Fragment f = list.get(i);
-                    if (f != null){
-                        Global_Variable.fragmentTransaction.hide(f);
-                    }
-                }
-                Global_Variable.fragmentTransaction.show(homeActivity.social_contact_fragment);
-                Global_Variable.fragmentTransaction.commit();
+                finish();
             }
         });
 
         info_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(view.getContext(),"点击了" + userid,Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), Userinfo.class);
+                Toast.makeText(CoComment.this,"点击了" + userid,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(CoComment.this, Userinfo.class);
                 intent.putExtra("userid", userid);
                 startActivity(intent);
             }
@@ -174,33 +156,14 @@ public class DynamicInfo extends Fragment {
                 second = cal.get(Calendar.SECOND);
 
                 if (TextUtils.isEmpty(dyinfo_comment)){
-                    Toast.makeText(view.getContext(), "请输入评论", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CoComment.this, "请输入评论", Toast.LENGTH_SHORT).show();
                 }else {
+                    if (dyinfo_comment.contains("回复")){
+                        Toast.makeText(CoComment.this, "回复", Toast.LENGTH_SHORT).show();
+                        sendreply();
+                    }
                     dyinfo_input.setText("");
                     sendmycomments(); //发送至服务端
-                    pinglun(dyid); //评论加1
-                }
-            }
-        });
-
-        commentsAdapter.setmOnItemClickListener(new CommentsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Comment comment = commentList.get(position);
-                if (view.getId() == R.id.user_img){
-                    Toast.makeText(view.getContext(), "点击了" + comment.getUserid(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), Userinfo.class);
-                    intent.putExtra("userid", comment.getUserid());
-                    startActivity(intent);
-                }else if (view.getId() == R.id.comment_content){
-                    Toast.makeText(view.getContext(), "点击了" + comment.getId(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(view.getContext(), CoComment.class);
-                    intent.putExtra("username", comment.getUsername());
-                    intent.putExtra("userid", comment.getUserid());
-                    intent.putExtra("coid", comment.getId());
-                    intent.putExtra("time", comment.gettime());
-                    intent.putExtra("content", comment.getContent());
-                    startActivity(intent);
                 }
             }
         });
@@ -213,8 +176,26 @@ public class DynamicInfo extends Fragment {
                 refreshLayout.setRefreshing(false);
             }
         });
-    }
 
+        commentsAdapter.setmOnItemClickListener(new CommentsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Comment comment = commentList.get(position);
+                if (view.getId() == R.id.user_img){
+                    Toast.makeText(CoComment.this, "点击了" + comment.getUserid(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CoComment.this, Userinfo.class);
+                    intent.putExtra("userid", comment.getUserid());
+                    startActivity(intent);
+                }else if (view.getId() == R.id.comment_content){
+                    Toast.makeText(CoComment.this, "点击了" + comment.getId(), Toast.LENGTH_SHORT).show();
+                    replyid = comment.getUserid();
+                    dyinfo_input.setText("回复" + comment.getUsername() + ":");
+                    dyinfo_input.requestFocus();
+                    dyinfo_input.setSelection(dyinfo_input.getText().toString().length());
+                }
+            }
+        });
+    }
 
     public void getcomments(){
         new Thread(new Runnable() { //耗时操作要开子线程
@@ -223,10 +204,10 @@ public class DynamicInfo extends Fragment {
                 try {
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder() //请求参数
-                            .add("dynamicid", dyid)
+                            .add("dycommentid", dyid)
                             .build();
                     Request request = new Request.Builder()
-                            .url(Global_Variable.ip + "NogiMusic/dycomment") //请求url
+                            .url(Global_Variable.ip + "NogiMusic/cocomment") //请求url
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -248,7 +229,7 @@ public class DynamicInfo extends Fragment {
             Log.d("fule", rs.getContent());
         }
         //singerList.addAll(s);
-        getActivity().runOnUiThread(new Runnable() { //回到主线程通知适配器刷新
+        runOnUiThread(new Runnable() { //回到主线程通知适配器刷新
             @Override
             public void run() {
                 Log.d("NBN", "OK");
@@ -257,6 +238,7 @@ public class DynamicInfo extends Fragment {
         });
     }
 
+
     public void sendmycomments(){
         new Thread(new Runnable() { //耗时操作要开子线程
             @Override
@@ -264,7 +246,7 @@ public class DynamicInfo extends Fragment {
                 try {
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder() //请求参数
-                            .add("method","dynamic")
+                            .add("method","comment")
                             .add("objectid", dyid)
                             .add("userid", Global_Variable.thisuser.id)
                             .add("content", dyinfo_comment)
@@ -296,18 +278,13 @@ public class DynamicInfo extends Fragment {
         for (commentresult rs : rslist){
             if (rs.code.equals("success")){
                 Looper.prepare();
-                Toast.makeText(view.getContext(), "发表成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CoComment.this, "发表成功", Toast.LENGTH_SHORT).show();
                 commentList.clear();
                 getcomments();
-
-                Intent intent = new Intent("dynamic_commit_success"); //本地广播，通知刷新动态列表
-                intent.putExtra("code","200");
-                localBroadcastManager.sendBroadcast(intent);
-
                 Looper.loop();
             }else if (rs.code.equals("failed")){
                 Looper.prepare();
-                Toast.makeText(view.getContext(), "发表失败，请稍后重试", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CoComment.this, "发表失败，请稍后重试", Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }
         }
@@ -317,19 +294,20 @@ public class DynamicInfo extends Fragment {
         public String code;
     }
 
-
-    public void pinglun(final String id){
+    public void sendreply(){
         new Thread(new Runnable() { //耗时操作要开子线程
             @Override
             public void run() {
                 try {
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder() //请求参数
-                            .add("method", "pinglun")
-                            .add("userid", id)
+                            .add("replyid", replyid)
+                            .add("commitid", Global_Variable.thisuser.id)
+                            .add("content", dyinfo_comment)
+                            .add("dycommentid", dyid)
                             .build();
                     Request request = new Request.Builder()
-                            .url(Global_Variable.ip + "NogiMusic/dynamic") //请求url
+                            .url(Global_Variable.ip + "NogiMusic/reply") //请求url
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -341,5 +319,4 @@ public class DynamicInfo extends Fragment {
             }
         }).start();
     }
-
 }

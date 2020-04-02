@@ -170,6 +170,13 @@ public class DynamicinfoActivity extends AppCompatActivity {
                     startActivity(intent);
                 }else if (view.getId() == R.id.comment_content){
                     Toast.makeText(view.getContext(), "点击了" + comment.getId(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(DynamicinfoActivity.this, CoComment.class);
+                    intent.putExtra("username", comment.getUsername());
+                    intent.putExtra("userid", comment.getUserid());
+                    intent.putExtra("coid", comment.getId());
+                    intent.putExtra("time", comment.gettime());
+                    intent.putExtra("content", comment.getContent());
+                    startActivity(intent);
                 }
             }
         });
