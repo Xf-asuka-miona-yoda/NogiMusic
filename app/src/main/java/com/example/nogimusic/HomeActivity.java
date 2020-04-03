@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
         int age = year - Integer.parseInt(Global_Variable.thisuser.age);//计算年龄
         userage.setText(String.valueOf(age) + "岁");
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        Intent intent = new Intent(this, MusicService.class);
+        final Intent intent = new Intent(this, MusicService.class);
         startService(intent);
         bindService(intent, connection, BIND_AUTO_CREATE);//绑定服务
         initfragment(1);
@@ -142,6 +142,8 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_comments:
                         Toast.makeText(HomeActivity.this, "点击了评论", Toast.LENGTH_SHORT).show();
+                        Intent intent1 = new Intent(HomeActivity.this, MessageActivity.class);
+                        startActivity(intent1);
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.nav_local:
