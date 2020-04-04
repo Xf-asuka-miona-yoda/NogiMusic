@@ -63,6 +63,10 @@ public class MymessageAdapter extends RecyclerView.Adapter<MymessageAdapter.View
         holder.content.setText(mymessage.getContent());
         if (mymessage.getType().equals("dycomment")){
             holder.type.setText("评论了您的动态");
+        }else if (mymessage.getType().equals("cocomment")){
+            holder.type.setText("评论了您的评论");
+        }else if (mymessage.getType().equals("reply")){
+            holder.type.setText("回复了您的评论");
         }
         holder.time.setText(mymessage.getTime());
 

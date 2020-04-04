@@ -112,6 +112,22 @@ public class MessageActivity extends AppCompatActivity {
                         intent.putExtra("time", mymessage.getObjecttime());
                         intent.putExtra("content", mymessage.getObjectcontent());
                         startActivity(intent);
+                    }else if (mymessage.getType().equals("cocomment")){
+                        Intent intent = new Intent(MessageActivity.this, CoComment.class);
+                        intent.putExtra("username", Global_Variable.thisuser.username);
+                        intent.putExtra("userid", Global_Variable.thisuser.id);
+                        intent.putExtra("coid", mymessage.getObjectid());
+                        intent.putExtra("time", mymessage.getObjecttime());
+                        intent.putExtra("content", mymessage.getObjectcontent());
+                        startActivity(intent);
+                    }else if (mymessage.getType().equals("reply")){
+                        Intent intent = new Intent(MessageActivity.this, CoComment.class);
+                        intent.putExtra("username", Global_Variable.thisuser.username);
+                        intent.putExtra("userid", Global_Variable.thisuser.id);
+                        intent.putExtra("coid", mymessage.getObjectid());
+                        intent.putExtra("time", mymessage.getObjecttime());
+                        intent.putExtra("content", mymessage.getObjectcontent());
+                        startActivity(intent);
                     }
                 }
             }
