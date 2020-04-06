@@ -1,11 +1,9 @@
 package com.example.nogimusic;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,17 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -32,69 +26,36 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SIngerinfo extends Fragment {
-    public String singerid;
-    private String singername;
-    private String singeric;
-    private String singerpic;
+
+public class HistoryFragment extends Fragment {
 
     private View view;
-
-    private TextView singer_name;
-    private TextView singer_introduce;
-    private ImageView singer_pic;
+    HomeActivity homeActivity;
 
     private List<Music> musicList = new ArrayList<>();
     private MusicAdapter musicAdapter;
 
-    HomeActivity homeActivity;
+    private TextView title;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 1:
-                    singer_name.setText(singername);
-                    singer_introduce.setText(singeric);
-                    Glide.with(getActivity()).load(singerpic).into(singer_pic);
-                    musicList.clear();
-                    sendrequest_singer_music();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
-    public void setinfo(String id, String name, String ic, String pic){
-        this.singerid = id;
-        this.singername = name;
-        this.singerpic = pic;
-        this.singeric = ic;
-        Log.d("test","更新了" + this.singername);
-        Message message = new Message();
-        message.what = 1;
-        handler.sendMessage(message);
-
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.singinfo_layout, container, false);
-        initmusicadapter();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_history, container, false);
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        homeActivity = (HomeActivity) getActivity();  //过早初始化会空指针
-        initview();
-        ImageButton back = (ImageButton) view.findViewById(R.id.backto_allsinger);
+        homeActivity = (HomeActivity) getActivity();
+
+        title = (TextView) view.findViewById(R.id.myhistory_title);
+
+        ImageButton back = (ImageButton) view.findViewById(R.id.myhistory_home);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Toast.makeText(v.getContext(),"hhh", Toast.LENGTH_SHORT).show();
                 Global_Variable.fragmentManager = getFragmentManager();
                 Global_Variable.fragmentTransaction = Global_Variable.fragmentManager.beginTransaction();
                 List<Fragment> list = Global_Variable.fragmentManager.getFragments();
@@ -104,28 +65,31 @@ public class SIngerinfo extends Fragment {
                         Global_Variable.fragmentTransaction.hide(f);
                     }
                 }
-                Global_Variable.fragmentTransaction.show(homeActivity.music_home_fragment.allSinger);
+                Global_Variable.fragmentTransaction.show(homeActivity.music_home_fragment);
                 Global_Variable.fragmentTransaction.commit();
             }
         });
 
         initmusicadapter();
-        //sendrequest_singer_music();
+        get_my_history();
+
         musicListener();
-    }
 
-
-
-
-    public void initview(){
-        singer_name = (TextView) view.findViewById(R.id.singer_info_singername);
-        singer_introduce = (TextView) view.findViewById(R.id.singer_info_singerin);
-        singer_pic = (ImageView) view.findViewById(R.id.singer_info_singerpic);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.my_history_refresh);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                musicList.clear();
+                get_my_history();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     //初始化音乐适配器
     public void initmusicadapter(){
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.singer_music);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.my_musichistory);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
         musicAdapter = new MusicAdapter(musicList, view.getContext());
@@ -133,24 +97,23 @@ public class SIngerinfo extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),DividerItemDecoration.VERTICAL)); //分割线
     }
 
-    public void sendrequest_singer_music(){ //发送音乐请求哦
+    public void get_my_history(){
         new Thread(new Runnable() { //耗时操作要开子线程
             @Override
             public void run() {
                 try {
                     OkHttpClient client = new OkHttpClient();
-                    RequestBody requestBody = new FormBody.Builder() //请求参数
-                            .add("singerid", singerid) //获取的音乐歌手id
-                            .add("singername", singername)
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("userid", Global_Variable.thisuser.id) //请求参数
                             .build();
                     Request request = new Request.Builder()
-                            .url(Global_Variable.ip + "NogiMusic/singermusic") //请求url
+                            .url(Global_Variable.ip + "NogiMusic/myhistory") //请求url
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String data = response.body().string();
                     Log.d("NMSL", data);
-                    parsejson_musichome(data); //解析服务端返回的值
+                    parsejsonmycollection(data); //解析服务端返回的值
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -158,9 +121,9 @@ public class SIngerinfo extends Fragment {
         }).start();
     }
 
-    public void parsejson_musichome(String jsondata) { //使用GSON解析服务端返回的json数据
+    private void parsejsonmycollection(String data) {
         Gson gson = new Gson();
-        List<musicresult> resultsList = gson.fromJson(jsondata, new TypeToken<List<musicresult>>(){}.getType());
+        List<musicresult> resultsList = gson.fromJson(data, new TypeToken<List<musicresult>>(){}.getType());
         for (musicresult musicresult1 : resultsList){
             Music music = new Music(musicresult1.musicid, musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic, "net");
             musicList.add(music);
@@ -169,6 +132,7 @@ public class SIngerinfo extends Fragment {
             @Override
             public void run() {
                 musicAdapter.notifyDataSetChanged();
+                title.setText("播放历史");
             }
         });
     }
@@ -184,8 +148,6 @@ public class SIngerinfo extends Fragment {
                     Global_Variable.musicplayQueue.queue.add(music); //加入播放队列
                 }
                 Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.getindex(music.getMusic_id()); //i记录当前是播放队列中的第几个
-                Log.d("cao", String.valueOf(Global_Variable.musicplayQueue.i));
-                Log.d("cao", Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_url());
                 homeActivity.musicBinder.initmediaplayer(Global_Variable.musicplayQueue.i); //初始化
                 homeActivity.musicBinder.play(); //播放
             }

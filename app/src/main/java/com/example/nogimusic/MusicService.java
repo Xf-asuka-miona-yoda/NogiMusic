@@ -24,7 +24,7 @@ public class MusicService extends Service {
             try {
                 if (Global_Variable.musicplayQueue.queue.get(i).getState().equals("net")){
                     musicurl = Global_Variable.ip + Global_Variable.musicplayQueue.queue.get(i).getMusic_url();
-                }else if (Global_Variable.musicplayQueue.queue.get(i).getState().equals("local")){
+                }else if (Global_Variable.musicplayQueue.queue.get(i).getState().equals("local")){ //本地音乐
                     musicurl = Global_Variable.musicplayQueue.queue.get(i).getMusic_url();
                 }
                 mediaPlayer.setDataSource(musicurl);
@@ -60,25 +60,27 @@ public class MusicService extends Service {
         }
 
         public void next(){
-            stop();
+
             if (Global_Variable.musicplayQueue.i + 1 < Global_Variable.musicplayQueue.queue.size()){
                 Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.i + 1;
+                stop();
                 initmediaplayer(Global_Variable.musicplayQueue.i);
                 play();
             } else {
                 Global_Variable.musicplayQueue.i = 0;
+                stop();
                 initmediaplayer(Global_Variable.musicplayQueue.i);
                 play();
             }
         }
 
         public void before(){
-            stop();
             if (Global_Variable.musicplayQueue.i == 0){
                 Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.queue.size() - 1;
             }else {
                 Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.i - 1;
             }
+            stop();
             initmediaplayer(Global_Variable.musicplayQueue.i);
             play();
         }

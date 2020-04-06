@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,10 +37,12 @@ import okhttp3.Response;
 public class HomeActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
+
     public Music_home music_home_fragment;
     public Music_recommend music_recommend_fragment;
     public Social_contact social_contact_fragment;
     public Mycollectin mycollectin;
+    public HistoryFragment historyFragment;
 
 
 
@@ -96,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view); //首先要获取navigationView实例
         View headview = navigationView.getHeaderView(0); //获取头部view
         TextView username = (TextView) headview.findViewById(R.id.user_name); //在头部view中定位
@@ -105,6 +109,16 @@ public class HomeActivity extends AppCompatActivity {
         int year = cal.get(Calendar.YEAR);   //获取年
         int age = year - Integer.parseInt(Global_Variable.thisuser.age);//计算年龄
         userage.setText(String.valueOf(age) + "岁");
+        ImageView userimg = (ImageView) headview.findViewById(R.id.head_user_img);
+        userimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_user = new Intent(HomeActivity.this, Userinfo.class);
+                intent_user.putExtra("userid", Global_Variable.thisuser.id);
+                startActivity(intent_user);
+            }
+        });
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         final Intent intent = new Intent(this, MusicService.class);
         startService(intent);
@@ -150,6 +164,16 @@ public class HomeActivity extends AppCompatActivity {
                         Toast.makeText(HomeActivity.this, "点击了本地音乐", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
+
+                    case R.id.nav_history:
+                        Toast.makeText(HomeActivity.this, "点击了播放历史", Toast.LENGTH_SHORT).show();
+                        if (historyFragment == null){
+                            initfragment(5);
+                        }
+                        replaceFragment(historyFragment);
+                        drawerLayout.closeDrawers();
+                        break;
+
                     case R.id.nav_quit:
                         //Toast.makeText(HomeActivity.this, "点击了登出", Toast.LENGTH_SHORT).show();
                         SharedPreferences.Editor preferences = getSharedPreferences("user", MODE_PRIVATE).edit();
@@ -218,6 +242,9 @@ public class HomeActivity extends AppCompatActivity {
         }else if (id == 4){
             mycollectin = new Mycollectin();
             addFragments(mycollectin);
+        }else if (id == 5){
+            historyFragment = new HistoryFragment();
+            addFragments(historyFragment);
         }
     }
 

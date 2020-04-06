@@ -50,6 +50,7 @@ public class Mycollectin extends Fragment {
         homeActivity = (HomeActivity) getActivity();  //过早初始化会空指针
         send_my_collection();
         title = (TextView) view.findViewById(R.id.mycollection_title);
+
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.my_collection_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

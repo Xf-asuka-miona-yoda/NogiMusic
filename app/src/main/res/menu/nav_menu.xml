@@ -14,6 +14,10 @@
             android:title="本地音乐"/>
 
         <item
+            android:id="@+id/nav_history"
+            android:title="播放历史"/>
+
+        <item
             android:id="@+id/nav_quit"
             android:title="退出登录"/>
     </group>

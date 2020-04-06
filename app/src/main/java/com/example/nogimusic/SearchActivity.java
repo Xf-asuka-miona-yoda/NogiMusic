@@ -216,10 +216,10 @@ public class SearchActivity extends AppCompatActivity {
                 musicBinder.stop();
                 Music music = musicList.get(position);
                 //Toast.makeText(view.getContext(), "你点击了"+music.getMusic_url(), Toast.LENGTH_SHORT).show();
-                if (!Global_Variable.musicplayQueue.isinclude(music.getMusic_name())){//如果没有才能加入，否则会造成重复
+                if (!Global_Variable.musicplayQueue.isinclude(music.getMusic_id())){//如果没有才能加入，否则会造成重复
                     Global_Variable.musicplayQueue.queue.add(music); //加入播放队列
                 }
-                Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.getindex(music.getMusic_name()); //i记录当前是播放队列中的第几个
+                Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.getindex(music.getMusic_id()); //i记录当前是播放队列中的第几个
                 Log.d("cao", String.valueOf(Global_Variable.musicplayQueue.i));
                 Log.d("cao", Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_url());
                 musicBinder.initmediaplayer(Global_Variable.musicplayQueue.i); //初始化
