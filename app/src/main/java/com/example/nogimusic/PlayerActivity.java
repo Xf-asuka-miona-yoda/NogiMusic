@@ -45,6 +45,19 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private ImageButton shoucang,pinglun,download;
     private ImageButton playorpause,before,next,method;
 
+    private DownloadService.DownloadBinder downloadBinder;
+    private ServiceConnection connectiondownload = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            downloadBinder = (DownloadService.DownloadBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
     private MusicService.MusicBinder musicBinder;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -96,6 +109,10 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent = new Intent(this, MusicService.class);
         startService(intent);
         bindService(intent, connection, BIND_AUTO_CREATE); //绑定服务
+
+        Intent intentdownload = new Intent(this, DownloadService.class);
+        startService(intentdownload);
+        bindService(intentdownload, connectiondownload, BIND_AUTO_CREATE); //绑定服务
 
         initview();
 
@@ -190,7 +207,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 if (Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getState().equals("local")){
                     Toast.makeText(PlayerActivity.this, "本地音乐不支持下载哦", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(PlayerActivity.this,"下载功能开发中",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(PlayerActivity.this,"下载功能开发中",Toast.LENGTH_SHORT).show();
+                    downloadBinder.startDownload(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i));
                 }
                 break;
             case R.id.before:
@@ -230,6 +248,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     protected void onDestroy() {
         super.onDestroy();
         unbindService(connection);
+        unbindService(connectiondownload);
     }
 
     public void sendcollection(){

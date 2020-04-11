@@ -1,6 +1,9 @@
 package com.example.nogimusic;
 
-public class Music {
+
+import org.litepal.crud.LitePalSupport;
+
+public class Music extends LitePalSupport {
     private String music_id;
     private String music_name;
     private String music_singer;
@@ -15,6 +18,14 @@ public class Music {
         this.music_pic_url = pic;
         this.music_url = url;
         this.state = state1;
+    }
+
+    public void setMusic_url(String music_url) {
+        this.music_url = music_url;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getMusic_name() {

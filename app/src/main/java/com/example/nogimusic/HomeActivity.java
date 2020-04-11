@@ -1,18 +1,22 @@
 package com.example.nogimusic;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,6 +28,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.litepal.LitePal;
 
 import java.util.Calendar;
 import java.util.List;
@@ -96,6 +102,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        LitePal.getDatabase();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
@@ -118,6 +125,10 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent_user);
             }
         });
+
+        if (ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+        }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         final Intent intent = new Intent(this, MusicService.class);
@@ -188,6 +199,20 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 1 :
+                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "拒绝将导致程序无法使用", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

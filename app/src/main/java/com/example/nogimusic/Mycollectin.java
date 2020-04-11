@@ -140,10 +140,10 @@ public class Mycollectin extends Fragment {
                 homeActivity.musicBinder.stop();
                 Music music = musicList.get(position);
                 //Toast.makeText(view.getContext(), "你点击了"+music.getMusic_url(), Toast.LENGTH_SHORT).show();
-                if (!Global_Variable.musicplayQueue.isinclude(music.getMusic_name())){//如果没有才能加入，否则会造成重复
+                if (!Global_Variable.musicplayQueue.isinclude(music.getMusic_id())){//如果没有才能加入，否则会造成重复
                     Global_Variable.musicplayQueue.queue.add(music); //加入播放队列
                 }
-                Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.getindex(music.getMusic_name()); //i记录当前是播放队列中的第几个
+                Global_Variable.musicplayQueue.i = Global_Variable.musicplayQueue.getindex(music.getMusic_id()); //i记录当前是播放队列中的第几个
                 homeActivity.musicBinder.initmediaplayer(Global_Variable.musicplayQueue.i); //初始化
                 homeActivity.musicBinder.play(); //播放
             }
