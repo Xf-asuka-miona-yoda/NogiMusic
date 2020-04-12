@@ -38,7 +38,7 @@ public class DownloadService extends Service {
             stopForeground(true);
             getNotificationManger().notify(1, getNotification(downlaodmusic.getMusic_name() + "下载成功", -1));
             Toast.makeText(DownloadService.this, downlaodmusic.getMusic_name() + "下载成功", Toast.LENGTH_SHORT).show();
-            File file1 = new File(Environment.getExternalStorageDirectory(),downlaodmusic.getMusic_name());
+            File file1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + "/" + downlaodmusic.getMusic_name());
             downlaodmusic.setMusic_url(file1.getPath());
             downlaodmusic.setState("local");
             downlaodmusic.save();
@@ -136,8 +136,8 @@ public class DownloadService extends Service {
             manager.createNotificationChannel(notificationChannel);
             builder.setChannelId("downloadnotify");
         }
-        builder.setSmallIcon(R.mipmap.logo);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo));
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         builder.setContentIntent(pi);
         builder.setContentTitle(title);
         if (process >= 0){

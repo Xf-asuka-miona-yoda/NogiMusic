@@ -3,6 +3,7 @@ package com.example.nogimusic;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Timer;
@@ -197,19 +199,24 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.player_shouchang:
                 //Toast.makeText(PlayerActivity.this,"收藏功能开发中",Toast.LENGTH_SHORT).show();
-                if (Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getState().equals("local")){
-                    Toast.makeText(PlayerActivity.this, "本地音乐不支持收藏哦", Toast.LENGTH_SHORT).show();
-                }else {
-                    sendcollection();
-                }
+                sendcollection();
                 break;
             case R.id.player_download:
-                if (Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getState().equals("local")){
-                    Toast.makeText(PlayerActivity.this, "本地音乐不支持下载哦", Toast.LENGTH_SHORT).show();
+                if( Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getState().equals("local")){
+                    Toast.makeText(PlayerActivity.this, "已经下载过了", Toast.LENGTH_SHORT).show();
                 }else {
-                    //Toast.makeText(PlayerActivity.this,"下载功能开发中",Toast.LENGTH_SHORT).show();
-                    downloadBinder.startDownload(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i));
+                    String fileName = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_url().substring(Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_url().lastIndexOf("/"));
+                    String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+                    File file = new File(directory + fileName );
+                    if (file.exists()){
+                        Toast.makeText(PlayerActivity.this, "已经下载过了", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //Toast.makeText(PlayerActivity.this,"下载功能开发中",Toast.LENGTH_SHORT).show();
+                        Music music = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i);
+                        downloadBinder.startDownload(music);
+                    }
                 }
+
                 break;
             case R.id.before:
 
@@ -227,17 +234,15 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.player_pinglun:
-                if (Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getState().equals("local")){
-                    Toast.makeText(PlayerActivity.this, "本地音乐不支持评论哦", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(PlayerActivity.this,Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id() + Global_Variable.thisuser.id,Toast.LENGTH_SHORT).show();
-                    String musicname = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_name();
-                    String musicid = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id();
-                    Intent intent_comments = new Intent(PlayerActivity.this, CommentsActivity.class);
-                    intent_comments.putExtra("musicname", musicname);
-                    intent_comments.putExtra("musicid", musicid);
-                    startActivity(intent_comments);
-                }
+
+                Toast.makeText(PlayerActivity.this,Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id() + Global_Variable.thisuser.id,Toast.LENGTH_SHORT).show();
+                String musicname = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_name();
+                String musicid = Global_Variable.musicplayQueue.queue.get(Global_Variable.musicplayQueue.i).getMusic_id();
+                Intent intent_comments = new Intent(PlayerActivity.this, CommentsActivity.class);
+                intent_comments.putExtra("musicname", musicname);
+                intent_comments.putExtra("musicid", musicid);
+                startActivity(intent_comments);
+
                 break;
             default:
                 break;

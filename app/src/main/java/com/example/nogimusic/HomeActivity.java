@@ -49,6 +49,7 @@ public class HomeActivity extends AppCompatActivity {
     public Social_contact social_contact_fragment;
     public Mycollectin mycollectin;
     public HistoryFragment historyFragment;
+    public LocalMusicFragment localMusicFragment;
 
 
 
@@ -173,6 +174,10 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_local:
                         Toast.makeText(HomeActivity.this, "点击了本地音乐", Toast.LENGTH_SHORT).show();
+                        if (localMusicFragment == null){
+                            initfragment(6);
+                        }
+                        replaceFragment(localMusicFragment);
                         drawerLayout.closeDrawers();
                         break;
 
@@ -270,6 +275,9 @@ public class HomeActivity extends AppCompatActivity {
         }else if (id == 5){
             historyFragment = new HistoryFragment();
             addFragments(historyFragment);
+        }else if (id == 6){
+            localMusicFragment = new LocalMusicFragment();
+            addFragments(localMusicFragment);
         }
     }
 

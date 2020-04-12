@@ -4,8 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
+
+import java.io.File;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -25,7 +28,8 @@ public class MusicService extends Service {
                 if (Global_Variable.musicplayQueue.queue.get(i).getState().equals("net")){
                     musicurl = Global_Variable.ip + Global_Variable.musicplayQueue.queue.get(i).getMusic_url();
                 }else if (Global_Variable.musicplayQueue.queue.get(i).getState().equals("local")){ //本地音乐
-                    musicurl = Global_Variable.musicplayQueue.queue.get(i).getMusic_url();
+                    musicurl = Global_Variable.musicplayQueue.queue.get(i).getMusic_url() + ".mp3";
+//
                 }
                 mediaPlayer.setDataSource(musicurl);
                 mediaPlayer.prepare();

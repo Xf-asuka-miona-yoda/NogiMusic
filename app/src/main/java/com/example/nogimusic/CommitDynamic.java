@@ -32,15 +32,23 @@ public class CommitDynamic extends AppCompatActivity {
     String my_dynamic;
     EditText dy_comtent;
 
+    private String lastid;
+
     private int year,month,day,hour,minute,second;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commit_dynamic);
+        Intent intent = getIntent();
+        final String data = intent.getStringExtra("content");
+        String lastname = intent.getStringExtra("username");
+        lastid = intent.getStringExtra("id");
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
         dy_comtent = (EditText) findViewById(R.id.my_dy_content);
-
+        if (!data.equals("原创")){
+            dy_comtent.setText("//" + lastname + ":" + data);
+        }
         Button commit = (Button) findViewById(R.id.fabu);
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +65,9 @@ public class CommitDynamic extends AppCompatActivity {
                     hour = cal.get(Calendar.HOUR_OF_DAY);//24小时制度
                     minute = cal.get(Calendar.MINUTE);
                     second = cal.get(Calendar.SECOND);
+                    if (!data.equals("原创")){
+                        sendzhuanfa();
+                    }
                     sendmydynamic();
 
                 }
@@ -128,5 +139,29 @@ public class CommitDynamic extends AppCompatActivity {
         public String code;
     }
 
+
+    public void sendzhuanfa(){
+        new Thread(new Runnable() { //耗时操作要开子线程
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder() //请求参数
+                            .add("method", "zhuanfa")
+                            .add("userid", lastid)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(Global_Variable.ip + "NogiMusic/dynamic") //请求url
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String data = response.body().string();
+                    Log.d("NMSL", data);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 
 }

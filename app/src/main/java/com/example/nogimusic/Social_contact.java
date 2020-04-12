@@ -65,6 +65,7 @@ public class Social_contact extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CommitDynamic.class);
+                intent.putExtra("content", "原创");
                 startActivity(intent);
             }
         });
@@ -148,6 +149,11 @@ public class Social_contact extends Fragment {
 
                 } else if (view.getId() == R.id.zhuanfa){
                     Toast.makeText(view.getContext(),"点击了转发", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), CommitDynamic.class);
+                    intent.putExtra("username", dynamic.getUsername());
+                    intent.putExtra("content", dynamic.getContent());
+                    intent.putExtra("id",dynamic.getDyid());
+                    startActivity(intent);
                 } else if (view.getId() == R.id.dianzan){
                     //Toast.makeText(view.getContext(),"点击了点赞", Toast.LENGTH_SHORT).show();
                     dianzan(dynamic.getDyid());
