@@ -28,7 +28,11 @@ public class MusicService extends Service {
                 if (Global_Variable.musicplayQueue.queue.get(i).getState().equals("net")){
                     musicurl = Global_Variable.ip + Global_Variable.musicplayQueue.queue.get(i).getMusic_url();
                 }else if (Global_Variable.musicplayQueue.queue.get(i).getState().equals("local")){ //本地音乐
-                    musicurl = Global_Variable.musicplayQueue.queue.get(i).getMusic_url() + ".mp3";
+                    if (Global_Variable.musicplayQueue.queue.get(i).getMusic_id().equals("24")){
+                        musicurl = Global_Variable.musicplayQueue.queue.get(i).getMusic_url() + ".flac";
+                    }else {
+                        musicurl = Global_Variable.musicplayQueue.queue.get(i).getMusic_url() + ".mp3";
+                    }
 //
                 }
                 mediaPlayer.setDataSource(musicurl);
