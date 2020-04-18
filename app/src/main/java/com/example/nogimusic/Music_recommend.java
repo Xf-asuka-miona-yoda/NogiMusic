@@ -1,5 +1,6 @@
 package com.example.nogimusic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -32,6 +34,7 @@ public class Music_recommend extends Fragment {
 
     HomeActivity homeActivity;
     TextView title;
+    private ImageButton search;
 
     @Nullable
     @Override
@@ -46,6 +49,14 @@ public class Music_recommend extends Fragment {
         homeActivity = (HomeActivity) getActivity();  //过早初始化会空指针
         title = (TextView) view.findViewById(R.id.recommend_title);
         title.setText("Hi," + Global_Variable.thisuser.username + "今日为您打造");
+        search = (ImageButton) view.findViewById(R.id.recommend_search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         initmusicadapter();
         getrecommend();
         musicListener();

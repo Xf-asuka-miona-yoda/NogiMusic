@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageButton
@@ -26,11 +26,18 @@
             android:text="热歌榜"
             android:textSize="20dp"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/hot_music"
-            android:layout_marginTop="5dp"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/hot_music"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"/>
+        </RelativeLayout>
+
 
         <TextView
             android:layout_marginTop="5dp"
@@ -40,11 +47,18 @@
             android:text="新歌榜"
             android:textSize="20dp"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/new_music"
-            android:layout_marginTop="5dp"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/new_music"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"/>
+
+        </RelativeLayout>
 
 
         <TextView
@@ -55,11 +69,26 @@
             android:text="飙升榜"
             android:textSize="20dp"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/soaring_music"
-            android:layout_marginTop="5dp"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/soaring_music"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_marginTop="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="我也是有底线的"
+            android:textSize="10sp"
+            android:gravity="center"/>
     </LinearLayout>
 
 </ScrollView>
