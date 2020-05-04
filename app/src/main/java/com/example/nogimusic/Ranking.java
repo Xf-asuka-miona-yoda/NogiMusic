@@ -267,6 +267,7 @@ public class Ranking extends Fragment {
         for (musicresult musicresult1 : resultsList){
             Music music = new Music(musicresult1.musicid, musicresult1.musicname, musicresult1.singer, musicresult1.musicurl, musicresult1.musicpic, "net");
             SoaringmusicList.add(music);
+            Log.d("biao","ok");
         }
         getActivity().runOnUiThread(new Runnable() {
             @Override

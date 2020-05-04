@@ -195,6 +195,7 @@ public class HomeActivity extends AppCompatActivity {
                         SharedPreferences.Editor preferences = getSharedPreferences("user", MODE_PRIVATE).edit();
                         preferences.putBoolean("auto", false); //禁止自动登录
                         preferences.commit();
+                        musicBinder.pause();  //暂停播放
                         Intent quit = new Intent(HomeActivity.this, MainActivity.class);
                         startActivity(quit);
                         break;
